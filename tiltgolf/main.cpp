@@ -1,15 +1,12 @@
-#include <QtCore>
-#include <QtGui>
-
-#include "tiltgolf.h"
+#include "MainWindow.h"
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    TiltGolf game;
-    game.setWindowTitle("Kinetic Scrolling");
-    game.resize(320, 320);
-    game.show();
+    MainWindow main;
+    main.showFullScreen();
+
     return app.exec();
 }

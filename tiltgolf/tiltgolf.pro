@@ -14,5 +14,7 @@ INCLUDEPATH += .
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += tiltgolf.h
-SOURCES += main.cpp tiltgolf.cpp
+HEADERS += MainWindow.h MenuScreen.h GameScreen.h
+SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp
+
+QT += core gui widgets
