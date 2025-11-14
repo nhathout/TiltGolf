@@ -1,4 +1,5 @@
 #include "GameScreen.h"
+#include "IMUScreen.h"
 #include <QString>
 
 // Game screen constructor implementation
@@ -11,6 +12,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 	timerLabel = new QLabel(QString("%1").arg(timeElapsed));
 	restartButton = new QPushButton("Restart");
 	exitButton = new QPushButton("Exit");
+	imuButton = new QPushButton("IMU Debug");	//skanda: New IMU Debug button
 
 	// Construct top bar
 	topBar->addWidget(levelLabel);
@@ -19,12 +21,15 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
         topBar->addStretch();
 	topBar->addWidget(restartButton);
 	topBar->addWidget(exitButton);
+	topBar->addWidget(imuButton);	//skanda: Add IMU Debug button to top bar
 
 	mainLayout->addLayout(topBar);
 	setLayout(mainLayout);
 
 	connect(restartButton, &QPushButton::clicked, this, &GameScreen::restartLevel);
 	connect(exitButton, &QPushButton::clicked, this, &GameScreen::exitToMenu);
+	connect(imuButton, &QPushButton::clicked, this, &GameScreen::openIMUScreen);
+
 
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &GameScreen::updateTimer);
@@ -45,4 +50,21 @@ void GameScreen::updateTimer() {
 
 void GameScreen::setLevel(int newLevelId) {
 	levelId = newLevelId;
+}
+
+void GameScreen::openIMUScreen() {
+    if (imuScreen) return; // already open
+
+    imuScreen = new IMUScreen();
+    imuScreen->setAttribute(Qt::WA_DeleteOnClose); // auto cleanup
+
+    // Connect back button
+    connect(imuScreen, &IMUScreen::backToGameScreen, this, [=]() {
+        imuScreen = nullptr; // forget the pointer
+        // GameScreen is already visible, just close IMU screen
+    });
+
+    // Optional: if you want to hide the game screen while IMU screen is open:
+    // this->hide();
+    imuScreen->showFullScreen();
 }

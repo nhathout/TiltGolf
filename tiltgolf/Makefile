@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = tiltgolf1.0.0
-DISTDIR = /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/.tmp/tiltgolf1.0.0
+DISTDIR = /ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf/.tmp/tiltgolf1.0.0
 LINK          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++
 LFLAGS        = --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1
 LIBS          = $(SUBLIBS) -latomic /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Widgets.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread  -lrt -lpthread -ldl 
@@ -55,16 +55,22 @@ OBJECTS_DIR   = ./
 SOURCES       = main.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
-		GameScreen.cpp moc_MainWindow.cpp \
+		GameScreen.cpp \
+		IMUScreen.cpp \
+		IMU.cpp moc_MainWindow.cpp \
 		moc_MenuScreen.cpp \
-		moc_GameScreen.cpp
+		moc_GameScreen.cpp \
+		moc_IMUScreen.cpp
 OBJECTS       = main.o \
 		MainWindow.o \
 		MenuScreen.o \
 		GameScreen.o \
+		IMUScreen.o \
+		IMU.o \
 		moc_MainWindow.o \
 		moc_MenuScreen.o \
-		moc_GameScreen.o
+		moc_GameScreen.o \
+		moc_IMUScreen.o
 DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/spec_pre.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/unix.conf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/linux.conf \
@@ -157,10 +163,14 @@ DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mks
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/lex.prf \
 		tiltgolf.pro MainWindow.h \
 		MenuScreen.h \
-		GameScreen.h main.cpp \
+		GameScreen.h \
+		IMUScreen.h \
+		IMU.h main.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
-		GameScreen.cpp
+		GameScreen.cpp \
+		IMUScreen.cpp \
+		IMU.cpp
 QMAKE_TARGET  = tiltgolf
 DESTDIR       = 
 TARGET        = tiltgolf
@@ -370,8 +380,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h IMUScreen.h IMU.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMUScreen.cpp IMU.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -403,25 +413,31 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++ -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wall -Wextra -dM -E -o moc_predefs.h /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_IMUScreen.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp
+	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_IMUScreen.cpp
 moc_MainWindow.cpp: MainWindow.h \
 		MenuScreen.h \
 		GameScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MainWindow.h -o moc_MainWindow.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MainWindow.h -o moc_MainWindow.cpp
 
 moc_MenuScreen.cpp: MenuScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MenuScreen.h -o moc_MenuScreen.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MenuScreen.h -o moc_MenuScreen.cpp
 
 moc_GameScreen.cpp: GameScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameScreen.h -o moc_GameScreen.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameScreen.h -o moc_GameScreen.cpp
+
+moc_IMUScreen.cpp: IMUScreen.h \
+		IMU.h \
+		moc_predefs.h \
+		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/users/s/k/skandan/EC535/lab5/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include IMUScreen.h -o moc_IMUScreen.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -452,8 +468,17 @@ MainWindow.o: MainWindow.cpp MainWindow.h \
 MenuScreen.o: MenuScreen.cpp MenuScreen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MenuScreen.o MenuScreen.cpp
 
-GameScreen.o: GameScreen.cpp GameScreen.h
+GameScreen.o: GameScreen.cpp GameScreen.h \
+		IMUScreen.h \
+		IMU.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameScreen.o GameScreen.cpp
+
+IMUScreen.o: IMUScreen.cpp IMUScreen.h \
+		IMU.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o IMUScreen.o IMUScreen.cpp
+
+IMU.o: IMU.cpp IMU.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o IMU.o IMU.cpp
 
 moc_MainWindow.o: moc_MainWindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainWindow.o moc_MainWindow.cpp
@@ -463,6 +488,9 @@ moc_MenuScreen.o: moc_MenuScreen.cpp
 
 moc_GameScreen.o: moc_GameScreen.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GameScreen.o moc_GameScreen.cpp
+
+moc_IMUScreen.o: moc_IMUScreen.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_IMUScreen.o moc_IMUScreen.cpp
 
 ####### Install
 

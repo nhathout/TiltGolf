@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QTimer>
 
+class IMUScreen; // forward declaration
+
 class GameScreen : public QWidget {
 	Q_OBJECT
 public:
@@ -18,6 +20,7 @@ signals:
 private slots:
 	void restartLevel();
 	void updateTimer();
+	void openIMUScreen();
 
 private:
 	int levelId;
@@ -28,7 +31,9 @@ private:
 	QLabel *timerLabel;
 	QPushButton *restartButton;
 	QPushButton *exitButton;
+	QPushButton *imuButton;
 	QTimer *timer;
+	IMUScreen *imuScreen = nullptr; // store pointer to current IMUScreen
 };
 
 #endif
