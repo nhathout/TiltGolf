@@ -1,0 +1,29 @@
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+read_imu
+read_mag
+tiltgolf
+tiltgolf.out
+*.elf
+
+# Qt build directories
+build-*/
+*.pro.user
+*.qmake.stash
+Makefile
+
+# Archives
+*.zip
+
+# Backup and temp files
+*~
+*.swp
+.DS_Store
+
+# IDE-specific
+.vscode/
+.idea/
+*.pro.user.*
