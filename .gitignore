@@ -1,41 +1,17 @@
-# Qt Creator / Qt project
-*.pro.user
-*.pro.user.*.cache
-*.pro.user.*.qmake.stash
-*.qmake.stash
-*.autosave
-*.user
-*.user.*.user
-
-# Build directories
+# Build folders
 build-*/
-cmake-build-*/
-
-# Compiled object files
 *.o
-*.obj
-*.so
-*.dll
-*.a
-*.lib
 *.exe
-*.out
+*.obj
 
-# MOC generated files
+# Qt moc files
 moc_*.cpp
-*.moc
+moc_*.h
 qrc_*.cpp
 ui_*.h
 
-# Backup and temporary files
-*~
-*.swp
-*.tmp
-*.log
-*.zip
-*.tar
-*.gz
-*.DS_Store
-
-# Box2D build artifacts
-box2d/build/
+# Qt temporary files
+*.pro.user
+*.qmake.stash
+*.qmlc
+*.rcc
