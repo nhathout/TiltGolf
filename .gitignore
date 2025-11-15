@@ -1,29 +1,41 @@
+# Qt Creator / Qt project
+*.pro.user
+*.pro.user.*.cache
+*.pro.user.*.qmake.stash
+*.qmake.stash
+*.autosave
+*.user
+*.user.*.user
+
+# Build directories
+build-*/
+cmake-build-*/
+
 # Compiled object files
 *.o
 *.obj
+*.so
+*.dll
+*.a
+*.lib
+*.exe
+*.out
 
-# Executables
-read_imu
-read_mag
-tiltgolf
-tiltgolf.out
-*.elf
+# MOC generated files
+moc_*.cpp
+*.moc
+qrc_*.cpp
+ui_*.h
 
-# Qt build directories
-build-*/
-*.pro.user
-*.qmake.stash
-Makefile
-
-# Archives
-*.zip
-
-# Backup and temp files
+# Backup and temporary files
 *~
 *.swp
-.DS_Store
+*.tmp
+*.log
+*.zip
+*.tar
+*.gz
+*.DS_Store
 
-# IDE-specific
-.vscode/
-.idea/
-*.pro.user.*
+# Box2D build artifacts
+box2d/build/
