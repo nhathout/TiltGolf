@@ -27,14 +27,14 @@ make
 
 > ℹ️  Ensure Qt 5.15 (or later) development packages and a C++17-capable compiler are installed.
 
-## Box2D Test Harness (Desktop Prototype)
+## Box2D Test (runs on Mac)
 The `Box2DTest.cpp` file is a lightweight SFML window that drives a Box2D world for tuning forces, damping, and collisions before pushing to hardware.
 
 ### Prerequisites
 - Box2D 3.x headers/libraries available on your system (e.g., via package manager).
 - SFML 2.5+ development packages (`sfml-graphics`, `sfml-window`, `sfml-system`).
 
-### Build & Run
+### Build & Run the Test
 ```bash
 mkdir -p build
 g++ -std=c++17 tiltgolf/Box2DTest.cpp -I/usr/include -o build/Box2DTest \
