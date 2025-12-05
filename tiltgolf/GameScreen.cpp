@@ -1,5 +1,4 @@
 #include "GameScreen.h"
-#include "IMUScreen.h"
 #include <QString>
 #include <QMessageBox>
 
