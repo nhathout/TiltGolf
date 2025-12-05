@@ -16,8 +16,8 @@ LIBS += -lm
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += MainWindow.h MenuScreen.h GameScreen.h IMUScreen.h IMU.h
+HEADERS += MainWindow.h MenuScreen.h GameScreen.h IMU.h GameView.h GameController.h PhysicsEngine.h LevelData.h
 
-SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMUScreen.cpp IMU.cpp
+SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMU.cpp GameView.cpp GameController.cpp PhysicsEngine.cpp
 
 QT += core gui widgets

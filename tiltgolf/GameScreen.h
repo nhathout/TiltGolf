@@ -28,7 +28,6 @@ signals:
 private slots:
     void restartLevel();
     void updateTimer();
-    void openIMUScreen();
     
     // Slot to handle the "Game Won" signal from the controller
     void handleLevelComplete();

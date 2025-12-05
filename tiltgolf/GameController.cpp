@@ -1,4 +1,5 @@
 #include "GameController.h"
+
 #include <iostream>
 
 GameController::GameController(QObject *parent) : QObject(parent), isWon(false) {

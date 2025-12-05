@@ -1,4 +1,6 @@
 #include "GameScreen.h"
+#include "GameController.h"
+#include "GameView.h"
 #include <QString>
 #include <QMessageBox>
 
