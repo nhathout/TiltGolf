@@ -20,10 +20,10 @@ public slots:
 
 private:
     GameController* controller;
-    
-    // Helper to convert meters to pixels
-    QPointF toPixels(b2Vec2 vec);
-    float toPixels(float meters);
+
+    // Helper to convert meters to pixels using compile-time PPM
+    QPointF toPixels(const b2Vec2 &vec) const;
+    float toPixels(float meters) const;
 };
 
 #endif

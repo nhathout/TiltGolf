@@ -24,6 +24,14 @@ public slots:
     void pauseGame();
     void resumeGame();
 
+    // Expose simple IMU calibrate action to UI
+    void calibrateIMU();
+
+    // Live preview calibration control (note: resetBallToStart default true)
+    void startCalibrationPreview(bool resetBallToStart = true);
+    void acceptCalibrationPreview();
+    void cancelCalibrationPreview();
+
 signals:
     void gameStateUpdated(); // Tells view to repaint
     void gameWon();          // Tells GameScreen we finished
