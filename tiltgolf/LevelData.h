@@ -2,7 +2,6 @@
 #define LEVELDATA_H
 
 #include <vector>
-#include <algorithm>
 #include "box2d/box2d.h"
 
 // Conversion factor: 15 pixels = 1 meter (compile-time constant)
