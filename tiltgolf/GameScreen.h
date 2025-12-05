@@ -31,9 +31,7 @@ private:
 	QLabel *timerLabel;
 	QPushButton *restartButton;
 	QPushButton *exitButton;
-	QPushButton *imuButton;
 	QTimer *timer;
-	IMUScreen *imuScreen = nullptr; // store pointer to current IMUScreen
 };
 
 #endif

@@ -5,56 +5,80 @@
 #include <linux/i2c-dev.h>
 #include <iostream>
 
-#define ACC_ADDR 0x19
-#define MAG_ADDR 0x1E
+// I2C Configuration
+#define I2C_DEVICE "/dev/i2c-2"
+#define MAG_ADDR   0x1E
 
-#define CTRL_REG1_A 0x20
-#define OUT_X_L_A   0x28
-#define CRA_REG_M   0x00
-#define CRB_REG_M   0x01
-#define MR_REG_M    0x02
-#define OUT_X_H_M   0x03
+// Magnetometer Registers
+#define CRA_REG_M  0x00 // Config A (Rate)
+#define CRB_REG_M  0x01 // Config B (Gain)
+#define MR_REG_M   0x02 // Mode
+#define OUT_X_H_M  0x03 // Data Start
 
-static bool writeReg(int fd, uint8_t reg, uint8_t value) {
+IMU::IMU() : i2c_fd(-1), mx(0), my(0), mz(0) {}
+
+IMU::~IMU() {
+    if (i2c_fd >= 0) {
+        close(i2c_fd);
+    }
+}
+
+bool IMU::begin() {
+    // Open I2C device
+    i2c_fd = open(I2C_DEVICE, O_RDWR);
+    if (i2c_fd < 0) {
+        std::cerr << "IMU Error: Failed to open " << I2C_DEVICE << std::endl;
+        return false;
+    }
+
+    // Select Magnetometer Address
+    if (ioctl(i2c_fd, I2C_SLAVE, MAG_ADDR) < 0) {
+        std::cerr << "IMU Error: Failed to acquire bus access/talk to slave" << std::endl;
+        return false;
+    }
+
+    // Configure Registers
+    
+    // CRA_REG_M: Data Rate
+    if (!writeReg(CRA_REG_M, 0x10)) return false; 
+
+    // CRB_REG_M: Gain
+    if (!writeReg(CRB_REG_M, 0x20)) return false; 
+
+    // MR_REG_M: Mode
+    if (!writeReg(MR_REG_M, 0x00)) return false;
+
+    return true;
+}
+
+void IMU::update() {
+    if (i2c_fd < 0) return;
+
+    // Ensure we are talking to the Magnetometer 
+    ioctl(i2c_fd, I2C_SLAVE, MAG_ADDR);
+
+    uint8_t data[6];
+    
+    // Read 6 bytes starting from OUT_X_H_M
+    if (readRegs(OUT_X_H_M, data, 6)) {
+        // Registers are ordered X, Z, Y in the memory map
+        // Data is Big Endian (High byte, Low byte)
+        
+        mx = (int16_t)((data[0] << 8) | data[1]); // X
+        mz = (int16_t)((data[2] << 8) | data[3]); // Z
+        my = (int16_t)((data[4] << 8) | data[5]); // Y
+    }
+}
+
+
+bool IMU::writeReg(uint8_t reg, uint8_t value) {
     uint8_t buf[2] = {reg, value};
-    return write(fd, buf, 2) == 2;
+    return write(i2c_fd, buf, 2) == 2;
 }
 
-static bool readRegs(int fd, uint8_t start, uint8_t *data, int len) {
-    if (write(fd, &start, 1) != 1) return false;
-    return read(fd, data, len) == len;
-}
-
-bool initAccelerometer(int &fd) {
-    fd = open("/dev/i2c-2", O_RDWR);
-    if (fd < 0) return false;
-    if (ioctl(fd, I2C_SLAVE, ACC_ADDR) < 0) return false;
-    return writeReg(fd, CTRL_REG1_A, 0x27); // enable, 50Hz, all axes
-}
-
-bool initMagnetometer(int &fd) {
-    if (ioctl(fd, I2C_SLAVE, MAG_ADDR) < 0) return false;
-    if (!writeReg(fd, CRA_REG_M, 0x10)) return false; // 15 Hz
-    if (!writeReg(fd, CRB_REG_M, 0x20)) return false; // gain
-    return writeReg(fd, MR_REG_M, 0x00);             // continuous
-}
-
-bool readAccelerometer(int fd, int16_t &ax, int16_t &ay, int16_t &az) {
-    uint8_t data[6];
-    if (ioctl(fd, I2C_SLAVE, ACC_ADDR) < 0) return false;
-    if (!readRegs(fd, OUT_X_L_A | 0x80, data, 6)) return false; // auto-increment
-    ax = (int16_t)((data[1] << 8) | data[0]);
-    ay = (int16_t)((data[3] << 8) | data[2]);
-    az = (int16_t)((data[5] << 8) | data[4]);
-    return true;
-}
-
-bool readMagnetometer(int fd, int16_t &mx, int16_t &my, int16_t &mz) {
-    uint8_t data[6];
-    if (ioctl(fd, I2C_SLAVE, MAG_ADDR) < 0) return false;
-    if (!readRegs(fd, OUT_X_H_M, data, 6)) return false; // X,Z,Y order
-    mx = (int16_t)((data[0] << 8) | data[1]);
-    mz = (int16_t)((data[2] << 8) | data[3]);
-    my = (int16_t)((data[4] << 8) | data[5]);
-    return true;
+bool IMU::readRegs(uint8_t start, uint8_t *data, int len) {
+    // Write register address we want to start reading from
+    if (write(i2c_fd, &start, 1) != 1) return false;
+    // Read the data back
+    return read(i2c_fd, data, len) == len;
 }

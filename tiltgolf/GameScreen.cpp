@@ -1,70 +1,76 @@
 #include "GameScreen.h"
 #include "IMUScreen.h"
 #include <QString>
+#include <QMessageBox>
 
-// Game screen constructor implementation
 GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
-	// Allocate the layouts, labels, and buttons
-	mainLayout = new QVBoxLayout(this);
-	topBar = new QHBoxLayout();
-	levelLabel = new QLabel(QString("Level %1").arg(0));
-	timeElapsed= 0;
-	timerLabel = new QLabel(QString("%1").arg(timeElapsed));
-	restartButton = new QPushButton("Restart");
-	exitButton = new QPushButton("Exit");
-	imuButton = new QPushButton("IMU Debug");	//skanda: New IMU Debug button
+    // 1. Create Controller
+    controller = new GameController(this);
 
-	// Construct top bar
-	topBar->addWidget(levelLabel);
-	topBar->addStretch();
-	topBar->addWidget(timerLabel);
-        topBar->addStretch();
-	topBar->addWidget(restartButton);
-	topBar->addWidget(exitButton);
-	topBar->addWidget(imuButton);	//skanda: Add IMU Debug button to top bar
+    // 2. Create View (pass controller to it)
+    gameView = new GameView(controller, this);
+    
+    // 3. Setup Layout
+    mainLayout = new QVBoxLayout(this);
+    topBar = new QHBoxLayout();
+    
+    levelLabel = new QLabel(QString("Level %1").arg(1));
+    timeElapsed = 0;
+    timerLabel = new QLabel(QString("Time: %1").arg(timeElapsed));
+    
+    restartButton = new QPushButton("Restart");
+    exitButton = new QPushButton("Exit");
 
-	mainLayout->addLayout(topBar);
-	setLayout(mainLayout);
+    // Top Bar Widgets
+    topBar->addWidget(levelLabel);
+    topBar->addStretch();
+    topBar->addWidget(timerLabel);
+    topBar->addStretch();
+    topBar->addWidget(restartButton);
+    topBar->addWidget(exitButton);
 
-	connect(restartButton, &QPushButton::clicked, this, &GameScreen::restartLevel);
-	connect(exitButton, &QPushButton::clicked, this, &GameScreen::exitToMenu);
-	connect(imuButton, &QPushButton::clicked, this, &GameScreen::openIMUScreen);
+    mainLayout->addLayout(topBar);
+    
+    // Add the Game View (Physics rendering) to the center
+    mainLayout->addWidget(gameView, 1); // 1 = stretch factor
 
+    setLayout(mainLayout);
 
-	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &GameScreen::updateTimer);
-	timer->start(1000);
+    // 4. Connect Signals
+    connect(restartButton, &QPushButton::clicked, this, &GameScreen::restartLevel);
+    connect(exitButton, &QPushButton::clicked, this, &GameScreen::exitToMenu);
+    
+    // Connect Controller Win Signal
+    connect(controller, &GameController::gameWon, this, &GameScreen::handleLevelComplete);
 
+    // Game Timer (for UI clock, not physics)
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &GameScreen::updateTimer);
+    
+    // Start Level 1 immediately (or wait for setLevel)
+    controller->loadLevel(1);
+    timer->start(1000);
 }
 
-// Level restart slot implementation
 void GameScreen::restartLevel() {
-	timeElapsed = 0;
+    timeElapsed = 0;
+    timerLabel->setText("Time: 0");
+    controller->resetGame();
 }
 
-// Timer update slot implementation
 void GameScreen::updateTimer() {
-	timeElapsed++;
-	timerLabel->setText(QString("%1 s").arg(timeElapsed));
+    timeElapsed++;
+    timerLabel->setText(QString("Time: %1").arg(timeElapsed));
 }
 
 void GameScreen::setLevel(int newLevelId) {
-	levelId = newLevelId;
+    levelId = newLevelId;
+    levelLabel->setText(QString("Level %1").arg(levelId));
+    controller->loadLevel(levelId);
+    timeElapsed = 0;
 }
 
-void GameScreen::openIMUScreen() {
-    if (imuScreen) return; // already open
-
-    imuScreen = new IMUScreen();
-    imuScreen->setAttribute(Qt::WA_DeleteOnClose); // auto cleanup
-
-    // Connect back button
-    connect(imuScreen, &IMUScreen::backToGameScreen, this, [=]() {
-        imuScreen = nullptr; // forget the pointer
-        // GameScreen is already visible, just close IMU screen
-    });
-
-    // Optional: if you want to hide the game screen while IMU screen is open:
-    // this->hide();
-    imuScreen->showFullScreen();
+void GameScreen::handleLevelComplete() {
+    QMessageBox::information(this, "Winner!", "You sank the ball!");
+    restartLevel(); // Or advance to next level
 }

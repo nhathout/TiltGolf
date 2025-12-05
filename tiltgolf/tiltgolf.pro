@@ -5,6 +5,8 @@
 TEMPLATE = app
 TARGET = tiltgolf
 INCLUDEPATH += .
+include(Box2D.pri)
+LIBS += -lm
 
 # You can make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -15,6 +17,7 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += MainWindow.h MenuScreen.h GameScreen.h IMUScreen.h IMU.h
+
 SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMUScreen.cpp IMU.cpp
 
 QT += core gui widgets
