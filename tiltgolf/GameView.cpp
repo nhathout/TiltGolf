@@ -1,7 +1,8 @@
 #include "GameView.h"
+#include <algorithm>
 
-GameView::GameView(GameController* controller, QWidget *parent) 
-    : QWidget(parent), controller(controller) 
+GameView::GameView(GameController *controller, QWidget *parent)
+    : QWidget(parent), controller(controller)
 {
     // Optimize for embedded
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -55,11 +56,14 @@ void GameView::paintEvent(QPaintEvent *) {
     painter.drawEllipse(ballCenter, ballRadius, ballRadius);
 }
 
-// Coordinate Conversion
-QPointF GameView::toPixels(b2Vec2 vec) {
+// Convert a world-space vector (meters) to screen pixels using compile-time PPM
+QPointF GameView::toPixels(const b2Vec2 &vec) const
+{
     return QPointF(vec.x * PPM, vec.y * PPM);
 }
 
-float GameView::toPixels(float meters) {
+// Convert a scalar in meters to pixels
+float GameView::toPixels(float meters) const
+{
     return meters * PPM;
 }

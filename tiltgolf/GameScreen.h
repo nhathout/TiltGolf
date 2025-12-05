@@ -12,6 +12,7 @@
 class GameController;
 class GameView;
 class IMUScreen;
+class CalibrationDialog;
 
 class GameScreen : public QWidget {
     Q_OBJECT
@@ -45,7 +46,8 @@ private:
     QLabel *timerLabel;
     QPushButton *restartButton;
     QPushButton *exitButton;
-    
+    QPushButton *calibrateButton; // new: button to trigger mag calibration
+
     QTimer *timer;
     int timeElapsed;
     int levelId;
