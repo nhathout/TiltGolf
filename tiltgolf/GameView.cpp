@@ -1,13 +1,13 @@
 #include "GameView.h"
-#include <algorithm>
 
 GameView::GameView(GameController *controller, QWidget *parent)
     : QWidget(parent), controller(controller)
 {
     // Optimize for embedded
+    // We will paint the entire widget each frame, so tell Qt this widget is opaque
     setAttribute(Qt::WA_OpaquePaintEvent);
-    setStyleSheet("background-color: #228B22;"); // Forest Green
-    
+    setAutoFillBackground(false); // we paint the background ourselves
+
     // Listen to controller updates
     connect(controller, &GameController::gameStateUpdated, this, &GameView::updateView);
 }
@@ -20,6 +20,11 @@ void GameView::updateView() {
 void GameView::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+
+    // --- CLEAR THE BACKGROUND FIRST (VERY IMPORTANT) ---
+    // Paint the ground (green) to cover the entire widget so nothing beneath shows through.
+    QColor groundColor(34, 139, 34); // same forest green as before
+    painter.fillRect(rect(), groundColor);
 
     LevelConfig level = controller->getCurrentLevel();
     b2Vec2 ballPos = controller->getBallPos();
@@ -34,15 +39,15 @@ void GameView::paintEvent(QPaintEvent *) {
     painter.drawEllipse(holeCenter, holePxRadius, holePxRadius);
 
     // --- 2. Draw Walls (Brown/Dark Green) ---
-    painter.setBrush(QColor(139, 69, 19)); // SaddleBrown
-    
+    painter.setBrush(QColor(139, 69, 19)); // SaddleBrown (walls)
+    painter.setPen(Qt::NoPen);
+
     for (const auto& wall : level.walls) {
         QPointF center = toPixels(wall.position);
         float w = toPixels(wall.size.x); // Box2D uses half-width
         float h = toPixels(wall.size.y); // Box2D uses half-height
-        
-        // DrawRect takes top-left, width, height. 
-        // Our center is center, w/h are half-extents.
+
+        // Draw rectangle centered at 'center'
         painter.drawRect(QRectF(center.x() - w, center.y() - h, w*2, h*2));
     }
 
