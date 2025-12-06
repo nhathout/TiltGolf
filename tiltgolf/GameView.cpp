@@ -1,4 +1,5 @@
 #include "GameView.h"
+#include <QPolygonF>
 
 GameView::GameView(GameController *controller, QWidget *parent)
     : QWidget(parent), controller(controller)
@@ -29,16 +30,17 @@ void GameView::paintEvent(QPaintEvent *) {
     LevelConfig level = controller->getCurrentLevel();
     b2Vec2 ballPos = controller->getBallPos();
 
-    // --- 1. Draw Hole (Black) ---
-    painter.setBrush(Qt::black);
+    // 1. Draw Water (Blue)
+    painter.setBrush(QColor(0, 120, 255, 180)); // translucent blue
     painter.setPen(Qt::NoPen);
-    
-    float holePxRadius = toPixels(level.holeRadius);
-    QPointF holeCenter = toPixels(level.holePos);
-    
-    painter.drawEllipse(holeCenter, holePxRadius, holePxRadius);
+    for (const auto& water : level.water) {
+        QPointF center = toPixels(water.position);
+        float w = toPixels(water.size.x);
+        float h = toPixels(water.size.y);
+        painter.drawRect(QRectF(center.x() - w, center.y() - h, w * 2, h * 2));
+    }
 
-    // --- 2. Draw Walls (Brown/Dark Green) ---
+    // Draw Walls (Brown) 
     painter.setBrush(QColor(139, 69, 19)); // SaddleBrown (walls)
     painter.setPen(Qt::NoPen);
 
@@ -50,8 +52,46 @@ void GameView::paintEvent(QPaintEvent *) {
         // Draw rectangle centered at 'center'
         painter.drawRect(QRectF(center.x() - w, center.y() - h, w*2, h*2));
     }
+    // 3. Draw Hole (Black)
+    painter.setBrush(Qt::black);
+    painter.setPen(Qt::NoPen);
+    
+    float holePxRadius = toPixels(level.holeRadius);
+    QPointF holeCenter = toPixels(level.holePos);
+    
+    painter.drawEllipse(holeCenter, holePxRadius, holePxRadius);
 
-    // --- 3. Draw Ball (White) ---
+    // Draw Flag at the Hole 
+    {
+        // Keep the flag compact so it just accents the hole
+        float poleHeight = toPixels(level.holeRadius * 1.2f);
+        float poleWidth = 1.5f; // pixels
+        QPointF poleTop(holeCenter.x(), holeCenter.y() - poleHeight);
+
+        painter.setPen(QPen(Qt::black, poleWidth));
+        painter.drawLine(holeCenter, poleTop);
+
+        float flagWidth = toPixels(level.holeRadius * 0.8f);
+        float flagHeight = toPixels(level.holeRadius * 0.6f);
+
+        QPolygonF flagShape;
+        flagShape << poleTop
+                  << QPointF(poleTop.x() + flagWidth, poleTop.y() + flagHeight * 0.3f)
+                  << QPointF(poleTop.x(), poleTop.y() + flagHeight);
+
+        painter.setBrush(QColor(220, 30, 30)); // red flag
+        painter.setPen(Qt::NoPen);
+        painter.drawPolygon(flagShape);
+    }
+
+    // Draw Start 
+    painter.setBrush(QColor(0, 90, 0));
+    painter.setPen(QPen(Qt::black, 1));
+    QPointF startCenter = toPixels(level.ballStartPos);
+    float startRadius = toPixels(0.6f);
+    painter.drawEllipse(startCenter, startRadius, startRadius);
+
+    // Draw Ball (White)
     painter.setBrush(Qt::white);
     painter.setPen(Qt::black);
     

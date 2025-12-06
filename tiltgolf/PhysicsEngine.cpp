@@ -25,7 +25,7 @@ void PhysicsEngine::loadLevel(const LevelConfig& level) {
     b2Vec2 gravity(0.0f, 0.0f);
     world = new b2World(gravity);
 
-    // 1. Create Walls
+    // 1. Create Walls (uniform restitution)
     b2BodyDef wallDef;
     wallDef.type = b2_staticBody;
     
@@ -35,7 +35,13 @@ void PhysicsEngine::loadLevel(const LevelConfig& level) {
         
         b2PolygonShape box;
         box.SetAsBox(w.size.x, w.size.y);
-        wall->CreateFixture(&box, 0.0f);
+
+        b2FixtureDef fixture;
+        fixture.shape = &box;
+        fixture.density = 0.0f;
+        fixture.friction = 0.8f;
+        fixture.restitution = 0.0f;
+        wall->CreateFixture(&fixture);
     }
 
     // 2. Create Ball
@@ -117,6 +123,22 @@ void PhysicsEngine::step() {
 
     // 9. Step Box2D
     world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+    // 10. Water hazards: check after step. If ball center is inside any water rect, reset.
+    if (!currentLevel.water.empty()) {
+        b2Vec2 pos = ballBody->GetPosition();
+        for (const auto &w : currentLevel.water) {
+            float minX = w.position.x - w.size.x;
+            float maxX = w.position.x + w.size.x;
+            float minY = w.position.y - w.size.y;
+            float maxY = w.position.y + w.size.y;
+
+            if (pos.x >= minX && pos.x <= maxX && pos.y >= minY && pos.y <= maxY) {
+                reset();
+                break;
+            }
+        }
+    }
 }
 
 b2Vec2 PhysicsEngine::getBallPosition() const {

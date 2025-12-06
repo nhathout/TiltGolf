@@ -2,6 +2,7 @@
 #define LEVELDATA_H
 
 #include <vector>
+#include <algorithm>
 #include "box2d/box2d.h"
 
 // Conversion factor: 15 pixels = 1 meter (compile-time constant)
@@ -18,6 +19,7 @@ struct LevelConfig {
     b2Vec2 holePos;
     float holeRadius;
     std::vector<WallDef> walls;
+    std::vector<WallDef> water;
     float width;  // World width in meters
     float height; // World height in meters
 };
@@ -38,8 +40,9 @@ public:
         // Wall thickness (half-size in meters).
         float wallThick = 0.5f;
 
-        // Clear any existing walls (safety)
+        // Clear any existing geometry (safety)
         level.walls.clear();
+        level.water.clear();
 
         // --- Boundary walls (placed fully inside the world) ---
         // Top wall: center at y = wallThick, spans full width
@@ -76,14 +79,37 @@ public:
 
             return level;
         }
-        else
-        {
-            // Default Level (id == 1 or others): ball top-right, hole center
-            float margin = 1.0f;
-            level.ballStartPos.Set(level.width - wallThick - margin, wallThick + margin); // top-right inside
-            level.holePos.Set(level.width * 0.5f, level.height * 0.5f);                   // center
-            return level;
-        }
+        // Default Level (id == 1 or others): three evenly spaced horizontal walls and a flag at the hole.
+        // Layout: start near top-left, hole near bottom-left. Walls sit at 1/4, 1/2, 3/4 height and alternate which side they touch (L, R, L)
+        float margin = 1.5f; // meters from inner border for start/hole placement
+        level.ballStartPos.Set(wallThick + margin, wallThick + margin + 0.5f); // top-left
+        level.holePos.Set(wallThick + margin + 1.0f, level.height - wallThick - margin); // bottom-left-ish
+
+        // Wall thickness (thin)
+        float barHalfThickness = 0.25f; // 0.5 m tall
+
+        // Three bars at 1/4, 1/2, 3/4 of the playfield height
+        float y1 = level.height * 0.25f;
+        float y2 = level.height * 0.50f;
+        float y3 = level.height * 0.75f;
+
+        // Left-touching bar (gap on the right)
+        float gapRight = 3.0f;
+        float lenLeft = (level.width - 2 * wallThick) - gapRight;
+        float halfLeft = lenLeft * 0.5f;
+        float centerLeft = wallThick + halfLeft;
+
+        // Right-touching bar (gap on the left)
+        float gapLeft = 3.0f;
+        float lenRight = (level.width - 2 * wallThick) - gapLeft;
+        float halfRight = lenRight * 0.5f;
+        float centerRight = level.width - wallThick - halfRight;
+
+        level.walls.push_back({b2Vec2(centerLeft, y1), b2Vec2(halfLeft, barHalfThickness)});   // bar 1 (touching left)
+        level.walls.push_back({b2Vec2(centerRight, y2), b2Vec2(halfRight, barHalfThickness)}); // bar 2 (touching right)
+        level.walls.push_back({b2Vec2(centerLeft, y3), b2Vec2(halfLeft, barHalfThickness)});   // bar 3 (touching left)
+
+        return level;
     }
 };
 
