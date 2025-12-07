@@ -60,22 +60,25 @@ public:
         // --- Per-level placement ---
         if (id == 2)
         {
-            // Level 2: two interior wall obstacles. Ball starts at top-left inside corner, hole at bottom-right inside corner.
-            float margin = 1.0f;                                                                    // meters from the inner face of the walls
-            level.ballStartPos.Set(wallThick + margin, wallThick + margin);                         // top-left corner inside
-            level.holePos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right inside
+            // Level 2: top-right start, single horizontal bar near the top, large water region bottom-left, hole bottom-right.
+            float margin = 1.5f;
+            level.ballStartPos.Set(level.width - wallThick - margin, wallThick + margin); // top-right
+            level.holePos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
 
-            // Obstacle A: vertical bar near left-center
-            b2Vec2 obsA_center(level.width * 0.35f, level.height * 0.5f);
-            float obsA_halfWidth = 0.3f;                                  // 0.6m wide
-            float obsA_halfHeight = std::max(0.8f, level.height * 0.18f); // tall enough to block path
-            level.walls.push_back({obsA_center, b2Vec2(obsA_halfWidth, obsA_halfHeight)});
+            // Horizontal bar spanning most of the playfield, placed near the upper third
+            float barHalfThickness = 0.25f;
+            float barMargin = 2.0f;
+            float barHalfWidth = (level.width - 2 * barMargin) * 0.5f;
+            float barCenterX = level.width * 0.5f;
+            float barY = level.height * 0.33f;
+            level.walls.push_back({b2Vec2(barCenterX, barY), b2Vec2(barHalfWidth, barHalfThickness)});
 
-            // Obstacle B: horizontal bar near right-center
-            b2Vec2 obsB_center(level.width * 0.65f, level.height * 0.5f);
-            float obsB_halfWidth = std::max(0.8f, level.width * 0.18f); // wide horizontal bar
-            float obsB_halfHeight = 0.3f;                               // 0.6m tall
-            level.walls.push_back({obsB_center, b2Vec2(obsB_halfWidth, obsB_halfHeight)});
+            // Water: large rectangle covering bottom-left ~2/3 width and bottom half height
+            float waterHalfW = level.width * 0.33f;        // ~10 m half-width (covers ~20 m of 30)
+            float waterHalfH = level.height * 0.40f;       // covers most of lower half
+            float waterCenterX = waterHalfW + wallThick;   // start from left border inward
+            float waterCenterY = level.height - wallThick - waterHalfH;
+            level.water.push_back({b2Vec2(waterCenterX, waterCenterY), b2Vec2(waterHalfW, waterHalfH)});
 
             return level;
         }
