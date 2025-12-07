@@ -43,7 +43,7 @@ public:
         level.id = id;
 
         // Define World Size (meters)
-        level.width = 32.0f;
+        level.width = 31.0f;
         level.height = 15.0f;
 
         // Default hole size (meters)
@@ -83,7 +83,7 @@ public:
             float leftGap = 4.0f; // leave some gap on the left
             float barHalfWidth = (level.width - wallThick - leftGap) * 0.5f;
             float barCenterX = level.width - wallThick - barHalfWidth; // touching right wall
-            float barY = level.height * 0.70f;
+            float barY = level.height * 0.30f;
             level.walls.push_back({b2Vec2(barCenterX, barY), b2Vec2(barHalfWidth, barHalfThickness)});
 
             // Water: shorter in height (~40% of screen), bottom-left region
