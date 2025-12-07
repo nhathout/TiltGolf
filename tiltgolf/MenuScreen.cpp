@@ -35,7 +35,7 @@ MenuScreen::MenuScreen(QWidget *parent) : QWidget(parent) {
 		QPushButton *levelButton = new QPushButton(QString("%1").arg(i+1));
 		levelButton->setStyleSheet("background-color: yellow; color: white; font-size: 18px; font-weight: bold;");
 		connect(levelButton, &QPushButton::clicked, [this, i]() {
-			emit levelSelected(i);
+			emit levelSelected(i + 1); // emit 1-based level ids
 		});
 
 		// Add button to grid at position i/3, i%3 (3 column layout)

@@ -30,6 +30,7 @@ public:
     // Getters for game logic
     b2Vec2 getBallPosition() const;
     float getBallAngle() const;
+    LevelConfig getLevelConfig() const;
     
     // Reset ball to start
     void reset();

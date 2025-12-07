@@ -41,6 +41,8 @@ void GameController::gameLoop() {
 
     // 1. Step Physics
     physics->step();
+    // Pull latest level state (for moving water)
+    currentLevel = physics->getLevelConfig();
 
     // 2. Check Win Condition
     // Calculate distance between ball center and hole center

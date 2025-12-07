@@ -124,19 +124,35 @@ void PhysicsEngine::step() {
     // 9. Step Box2D
     world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-    // 10. Water hazards: check after step. If ball center is inside any water rect, reset.
-    if (!currentLevel.water.empty()) {
-        b2Vec2 pos = ballBody->GetPosition();
-        for (const auto &w : currentLevel.water) {
-            float minX = w.position.x - w.size.x;
-            float maxX = w.position.x + w.size.x;
-            float minY = w.position.y - w.size.y;
-            float maxY = w.position.y + w.size.y;
+    // 10. Update moving water positions (level 3)
+    if (!currentLevel.movingWater.empty()) {
+        for (auto &mw : currentLevel.movingWater) {
+            mw.phase += mw.speed * TIME_STEP;
+            float offset = mw.amplitude * std::sin(mw.phase) * (mw.direction >= 0.0f ? 1.0f : -1.0f);
+            mw.position = b2Vec2(mw.basePosition.x, mw.basePosition.y + offset);
+        }
+    }
 
-            if (pos.x >= minX && pos.x <= maxX && pos.y >= minY && pos.y <= maxY) {
-                reset();
-                break;
-            }
+    // 11. Water hazards: check after step. If ball center is inside any water rect (static or moving), reset.
+    b2Vec2 pos = ballBody->GetPosition();
+    auto inside = [&](float cx, float cy, float hx, float hy) {
+        float minX = cx - hx;
+        float maxX = cx + hx;
+        float minY = cy - hy;
+        float maxY = cy + hy;
+        return (pos.x >= minX && pos.x <= maxX && pos.y >= minY && pos.y <= maxY);
+    };
+
+    for (const auto &w : currentLevel.water) {
+        if (inside(w.position.x, w.position.y, w.size.x, w.size.y)) {
+            reset();
+            return;
+        }
+    }
+    for (const auto &mw : currentLevel.movingWater) {
+        if (inside(mw.position.x, mw.position.y, mw.size.x, mw.size.y)) {
+            reset();
+            return;
         }
     }
 }
@@ -149,6 +165,10 @@ b2Vec2 PhysicsEngine::getBallPosition() const {
 float PhysicsEngine::getBallAngle() const {
     if (ballBody) return ballBody->GetAngle();
     return 0.0f;
+}
+
+LevelConfig PhysicsEngine::getLevelConfig() const {
+    return currentLevel;
 }
 
 bool PhysicsEngine::calibrateIMU()

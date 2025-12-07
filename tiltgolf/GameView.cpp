@@ -39,6 +39,12 @@ void GameView::paintEvent(QPaintEvent *) {
         float h = toPixels(water.size.y);
         painter.drawRect(QRectF(center.x() - w, center.y() - h, w * 2, h * 2));
     }
+    for (const auto& water : level.movingWater) {
+        QPointF center = toPixels(water.position);
+        float w = toPixels(water.size.x);
+        float h = toPixels(water.size.y);
+        painter.drawRect(QRectF(center.x() - w, center.y() - h, w * 2, h * 2));
+    }
 
     // Draw Walls (Brown) 
     painter.setBrush(QColor(139, 69, 19)); // SaddleBrown (walls)
