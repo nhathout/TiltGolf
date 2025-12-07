@@ -43,11 +43,11 @@ public:
         level.id = id;
 
         // Define World Size (meters)
-        level.width = 30.0f;
+        level.width = 32.0f;
         level.height = 15.0f;
 
         // Default hole size (meters)
-        level.holeRadius = 1.0f; // 1 meter radius
+        level.holeRadius = 0.6f; // slightly larger than the 0.5m ball radius
 
         // Wall thickness (half-size in meters).
         float wallThick = 0.5f;
@@ -104,17 +104,24 @@ public:
 
             // small walls
             float slimHalfW = 0.25f;
-            level.walls.push_back({b2Vec2(level.width * 0.33f, level.height * 0.35f), b2Vec2(slimHalfW, 3.5f)});
-            level.walls.push_back({b2Vec2(level.width * 0.66f, level.height * 0.70f), b2Vec2(slimHalfW, 3.5f)});
+            float leftHalfH = 5.0f;  
+            float leftY = (wallThick * 2.0f) + leftHalfH; 
+            float rightHalfH = 4.3f; 
+            float rightY = (level.height - (wallThick * 2.0f)) - rightHalfH; 
+            level.walls.push_back({b2Vec2(level.width * 0.20f, leftY), b2Vec2(slimHalfW, leftHalfH)});
+            level.walls.push_back({b2Vec2(level.width * 0.80f, rightY), b2Vec2(slimHalfW, rightHalfH)});
 
             // Moving water blocks (vertical oscillation, opposite directions)
             float waterHalfW = 2.3f;
             float waterHalfH = 1.8f;
-            float amp = 2.5f;     // meters up/down
+            float minCenterY = (wallThick * 2.0f) + waterHalfH;                  // touches top wall bottom edge
+            float maxCenterY = (level.height - (wallThick * 2.0f)) - waterHalfH; // touches bottom wall top edge
+            float baseY = (minCenterY + maxCenterY) * 0.5f;
+            float amp = (maxCenterY - minCenterY) * 0.5f;     // reach top and bottom
             float speed = 1.0f;   // radians/sec (slow)
 
             MovingWaterDef left;
-            left.basePosition.Set(level.width * 0.38f, level.height * 0.60f);
+            left.basePosition.Set(level.width * 0.38f, baseY);
             left.position = left.basePosition;
             left.size.Set(waterHalfW, waterHalfH);
             left.amplitude = amp;
@@ -123,12 +130,12 @@ public:
             left.direction = 1.0f;
 
             MovingWaterDef right;
-            right.basePosition.Set(level.width * 0.62f, level.height * 0.60f);
+            right.basePosition.Set(level.width * 0.62f, baseY);
             right.position = right.basePosition;
             right.size.Set(waterHalfW, waterHalfH);
             right.amplitude = amp;
             right.speed = speed;
-            right.phase = 3.14159265f; // start opposite
+            right.phase = 0.0f; 
             right.direction = -1.0f;
 
             level.movingWater.push_back(left);
