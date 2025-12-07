@@ -179,7 +179,7 @@ public:
             addWater(edgeXGap, level.height * 0.80f, edgeStripHalfW, edgeStripHalfH);
             // Right edge strips
             addWater(level.width - edgeXGap, level.height * 0.40f, edgeStripHalfW, edgeStripHalfH);
-            addWater(level.width - edgeXGap, level.height * 0.78f, edgeStripHalfW, edgeStripHalfH);
+            //addWater(level.width - edgeXGap, level.height * 0.78f, edgeStripHalfW, edgeStripHalfH);
             // Top  
             addWater(level.width * 0.60f, wallThick + 0.8f, 3.0f, 0.6f);
             // Bottom 
