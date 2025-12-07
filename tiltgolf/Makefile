@@ -101,6 +101,7 @@ SOURCES       = Box2D/src/dynamics/b2_body.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
 		GameScreen.cpp \
+		CalibrationDialog.cpp \
 		IMU.cpp \
 		GameView.cpp \
 		GameController.cpp \
@@ -108,7 +109,8 @@ SOURCES       = Box2D/src/dynamics/b2_body.cpp \
 		moc_MenuScreen.cpp \
 		moc_GameScreen.cpp \
 		moc_GameView.cpp \
-		moc_GameController.cpp
+		moc_GameController.cpp \
+		moc_CalibrationDialog.cpp
 OBJECTS       = b2_body.o \
 		b2_chain_circle_contact.o \
 		b2_chain_polygon_contact.o \
@@ -158,6 +160,7 @@ OBJECTS       = b2_body.o \
 		MainWindow.o \
 		MenuScreen.o \
 		GameScreen.o \
+		CalibrationDialog.o \
 		IMU.o \
 		GameView.o \
 		GameController.o \
@@ -166,7 +169,8 @@ OBJECTS       = b2_body.o \
 		moc_MenuScreen.o \
 		moc_GameScreen.o \
 		moc_GameView.o \
-		moc_GameController.o
+		moc_GameController.o \
+		moc_CalibrationDialog.o
 DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/spec_pre.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/unix.conf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/linux.conf \
@@ -562,9 +566,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++ -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp moc_CalibrationDialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
+	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp moc_CalibrationDialog.cpp
 moc_MainWindow.cpp: MainWindow.h \
 		MenuScreen.h \
 		GameScreen.h \
@@ -672,6 +676,11 @@ moc_GameController.cpp: GameController.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
 	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameController.h -o moc_GameController.cpp
+
+moc_CalibrationDialog.cpp: CalibrationDialog.h \
+		moc_predefs.h \
+		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include CalibrationDialog.h -o moc_CalibrationDialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1552,4 +1561,3 @@ install:  FORCE
 uninstall:  FORCE
 
 FORCE:
-
