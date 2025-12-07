@@ -190,36 +190,46 @@ public:
 
         if (id == 5)
         {
-            // Level 5: thin bridge between two large water pools.
+            // Level 5: top-right pool and bottom-left pool with uniform gaps (double ball width) and aligned bumpers.
             float margin = 1.2f;
             level.ballStartPos.Set(wallThick + margin, wallThick + margin); // near top-left
             level.holePos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
 
-            // bridge
-            float corridorHeight = 2.0f;      // clear path height
-            float corridorCenterY = level.height * 0.55f; 
+            float ballDiameter = 0.5f * 2.0f;  // ball radius is 0.5m
+            float gap = ballDiameter * 2.0f;   // shared gap size (2x ball width)
 
-            // Upper water rect
-            float upperHalfH = corridorCenterY - corridorHeight * 0.5f - wallThick - 0.3f;
-            float upperCenterY = wallThick + upperHalfH;
+            // Bottom-left water: ~50% height of gamescreen & leaves a gap to the right for goal
+            float bottomTop = level.height * 0.50f;
+            float bottomBottom = level.height - wallThick - 0.2f;
+            float bottomLeft = wallThick + 0.6f;
+            float bottomRight = level.width - wallThick - gap; // 2m dry strip on the right
+            b2Vec2 bottomCenter((bottomLeft + bottomRight) * 0.5f, (bottomTop + bottomBottom) * 0.5f);
+            b2Vec2 bottomHalf((bottomRight - bottomLeft) * 0.5f, (bottomBottom - bottomTop) * 0.5f);
+            level.water.push_back({bottomCenter, bottomHalf});
 
-            // Lower water rect
-            float lowerHalfH = level.height - (corridorCenterY + corridorHeight * 0.5f) - wallThick - 0.3f;
-            float lowerCenterY = level.height - wallThick - lowerHalfH;
+            // Top-right water: from the top wall down to 2m above the lower water
+            float topBottom = bottomTop - gap;         // 2m vertical gap between pools
+            float topTop = wallThick + 0.2f;
+            float topLeft = wallThick + gap;           // 2m start margin
+            float topRight = level.width - wallThick - 0.6f;
+            b2Vec2 topCenter((topLeft + topRight) * 0.5f, (topTop + topBottom) * 0.5f);
+            b2Vec2 topHalf((topRight - topLeft) * 0.5f, (topBottom - topTop) * 0.5f);
+            level.water.push_back({topCenter, topHalf});
 
-            // Water spans most of the width, leaving small dry margins
-            float waterHalfW = level.width * 0.44f;
-            float waterCenterX = level.width * 0.52f;
+            // walls: vertical post on the left edge of the top pool, horizontal one on top of the lower pool
+            float vertHalfW = 0.15f;
+            float vertTop = wallThick * 2.0f;    // touches the bottom of the top boundary wall
+            float vertBottom = topBottom;        // stops at the pool gap
+            float vertHalfH = (vertBottom - vertTop) * 0.5f;
+            float vertCenterY = vertTop + vertHalfH;
+            float vertX = topLeft;               // aligned with top pool's left edge
+            level.walls.push_back({b2Vec2(vertX, vertCenterY), b2Vec2(vertHalfW, vertHalfH)});
 
-            // Two big water rects
-            level.water.push_back({b2Vec2(waterCenterX, upperCenterY), b2Vec2(waterHalfW, upperHalfH)});
-            level.water.push_back({b2Vec2(waterCenterX, lowerCenterY), b2Vec2(waterHalfW, lowerHalfH)});
-
-            // small walls
-            // Near start: vertical post
-            level.walls.push_back({b2Vec2(wallThick + 2.8f, corridorCenterY), b2Vec2(0.2f, 0.9f)});
-            // Mid-corridor: horizontal bumper to redirect into water if hit hard
-            level.walls.push_back({b2Vec2(level.width * 0.55f, corridorCenterY), b2Vec2(1.0f, 0.15f)});
+            float horizHalfH = 0.15f;
+            float horizHalfW = 4.0f;
+            float horizCenterX = topLeft + horizHalfW; // left end matches the vertical wall
+            float horizCenterY = bottomTop - horizHalfH; // bottom edge sits on the lower pool's top edge
+            level.walls.push_back({b2Vec2(horizCenterX, horizCenterY), b2Vec2(horizHalfW, horizHalfH)});
 
             return level;
         }
