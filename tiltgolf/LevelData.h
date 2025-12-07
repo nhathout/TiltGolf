@@ -216,6 +216,38 @@ public:
 
             return level;
         }
+
+        if (id == 6)
+        {
+            // Level 6: hardest. Start bottom-right, finish top-right. Long thin lane between huge water rects.
+            float margin = 1.3f;
+            level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
+            level.holePos.Set(level.width - wallThick - margin, wallThick + margin); // top-right
+
+            auto addWater = [&](float cx, float cy, float hx, float hy) {
+                level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
+            };
+
+            // Lane parameters
+            float laneH = 2.0f; // path height
+            float laneCenterY = level.height * 0.52f;
+
+            // Huge upper and lower water rects enclosing the lane
+            float upperHalfH = laneCenterY - laneH * 0.5f - wallThick - 0.4f;
+            float lowerHalfH = level.height - (laneCenterY + laneH * 0.5f) - wallThick - 0.4f;
+            float poolHalfW = level.width * 0.46f;
+            float poolCenterX = level.width * 0.5f;
+            addWater(poolCenterX, wallThick + upperHalfH, poolHalfW, upperHalfH);
+            addWater(poolCenterX, level.height - wallThick - lowerHalfH, poolHalfW, lowerHalfH);
+
+            // Left pocket water to force U-turn
+            addWater(wallThick + 3.5f, level.height * 0.52f, 2.5f, 2.5f);
+
+            // Notch on right side to prevent hugging near the finish
+            addWater(level.width - wallThick - 1.0f, level.height * 0.40f, 0.8f, 1.0f);
+
+            return level;
+        }
         // Default Level (id == 1 or others): three evenly spaced horizontal walls and a flag at the hole.
         // Layout: start near top-left, hole near bottom-left. Walls sit at 1/4, 1/2, 3/4 height and alternate which side they touch (L, R, L)
         float margin = 1.5f; // meters from inner border for start/hole placement
