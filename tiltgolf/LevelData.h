@@ -239,7 +239,7 @@ public:
             // Level 6: five water rectangles and a single U-turn path around the left side of the horizontal wall.
             float margin = 1.3f;
             level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
-            level.holePos.Set(level.width - wallThick - margin, 3.0f); // top-right lane
+            level.holePos.Set(level.width - wallThick - margin, 2.2f); // top-right lane, right of the top pool
 
             auto addWaterRect = [&](float x1, float x2, float yTop, float yBottom) {
                 float cx = (x1 + x2) * 0.5f;
@@ -250,16 +250,16 @@ public:
             };
 
             // Shared edges for the sketch
-            float water3Left = wallThick + 1.4f;         // leaves a narrow corridor against the left wall
-            float water3Right = 4.2f;
-            float columnLeft = 6.2f;                     // left edge for the large top/bottom pools
-            float waterRight = level.width - wallThick - 2.0f; // right margin for the goal lane
+            float water3Left = wallThick + 1.4f;              // leaves a narrow corridor against the left wall
+            float water3Right = 4.0f;
+            float columnLeft = 6.0f;                          // left edge for the large top/bottom pools
+            float waterRight = level.width - wallThick - 1.3f; // right margin for the goal lane
 
-            float topBandTop = wallThick + 0.4f;
+            float topBandTop = wallThick + 0.3f;
             float topBandBottom = 6.8f;
-            float lowerBridgeTop = 8.3f;
-            float bottomBandTop = 10.5f;
-            float bottomBandBottom = level.height - wallThick - 0.2f;
+            float lowerBridgeTop = 9.0f;
+            float bottomBandTop = 11.0f;
+            float bottomBandBottom = level.height - wallThick - 0.3f;
 
             // Water blocks
             addWaterRect(water3Left, water3Right, topBandTop, bottomBandBottom);
@@ -277,11 +277,11 @@ public:
             float wallCenterX = wallLeft + wallHalfW;
             level.walls.push_back({b2Vec2(wallCenterX, wallY), b2Vec2(wallHalfW, wallHalfH)});
 
-            // Small vertical stub at the wall's left end (extends downward)
+            // Small vertical stub at the wall's left end; centered so the horizontal meets its midpoint
             float stubHalfW = 0.15f;
-            float stubHalfH = 0.9f;
+            float stubHalfH = 1.0f;
             float stubCenterX = wallLeft;
-            float stubCenterY = (wallY + wallHalfH) + stubHalfH;
+            float stubCenterY = wallY; // centered on the horizontal wall
             level.walls.push_back({b2Vec2(stubCenterX, stubCenterY), b2Vec2(stubHalfW, stubHalfH)});
 
             return level;
