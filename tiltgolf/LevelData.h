@@ -250,15 +250,16 @@ public:
             };
 
             // Shared edges for the sketch
-            float water3Left = wallThick + 1.4f;              // leaves a narrow corridor against the left wall
-            float water3Right = 4.0f;
-            float columnLeft = 6.0f;                          // left edge for the large top/bottom pools
-            float waterRight = level.width - wallThick - 1.3f; // right margin for the goal lane
+            float rightLaneWidth = 2.6f;                       // consistent lane width around the walls
+            float water3Left = wallThick + rightLaneWidth;     // corridor left of the vertical column
+            float water3Right = 5.0f;                          // moves vertical wall/stub right
+            float columnLeft = 6.8f;                           // aligns bridges to the right-shifted column
+            float waterRight = level.width - wallThick - rightLaneWidth; // double-width lane on the right for both bands
 
             float topBandTop = wallThick + 0.3f;
-            float topBandBottom = 6.8f;
-            float lowerBridgeTop = 9.0f;
-            float bottomBandTop = 11.0f;
+            float topBandBottom = 6.7f;
+            float lowerBridgeTop = 9.2f;
+            float bottomBandTop = 11.2f;
             float bottomBandBottom = level.height - wallThick - 0.3f;
 
             // Water blocks
