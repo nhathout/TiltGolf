@@ -236,16 +236,10 @@ public:
 
         if (id == 6)
         {
-            // Level 6: U-turn path with stacked pools and right-side gap (same gap as level 5).
+            // Level 6: five water rectangles and a single U-turn path around the left side of the horizontal wall.
             float margin = 1.3f;
             level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
-            level.holePos.Set(level.width - wallThick - margin, wallThick + margin); // top-right
-
-            float ballDiameter = 0.5f * 2.0f;
-            float gap = ballDiameter * 2.0f; // 2m dry strip on the right
-            float rightGapLeft = level.width - wallThick - gap;
-            float leftMargin = wallThick + 0.6f;
-            float rightInset = 0.4f; // keep water slightly off the right gap wall
+            level.holePos.Set(level.width - wallThick - margin, 3.0f); // top-right lane
 
             auto addWaterRect = [&](float x1, float x2, float yTop, float yBottom) {
                 float cx = (x1 + x2) * 0.5f;
@@ -255,28 +249,40 @@ public:
                 level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
             };
 
-            // 1) Bottom pool
-            addWaterRect(leftMargin, rightGapLeft - rightInset, level.height - 3.8f, level.height - wallThick - 0.2f);
+            // Shared edges for the sketch
+            float water3Left = wallThick + 1.4f;         // leaves a narrow corridor against the left wall
+            float water3Right = 4.2f;
+            float columnLeft = 6.2f;                     // left edge for the large top/bottom pools
+            float waterRight = level.width - wallThick - 2.0f; // right margin for the goal lane
 
-            // 2) Top pool
-            addWaterRect(leftMargin, rightGapLeft - rightInset, wallThick + 0.2f, 3.6f);
+            float topBandTop = wallThick + 0.4f;
+            float topBandBottom = 6.8f;
+            float lowerBridgeTop = 8.3f;
+            float bottomBandTop = 10.5f;
+            float bottomBandBottom = level.height - wallThick - 0.2f;
 
-            // 3) Left lower vertical block (forms the lower part of the U-turn pocket)
-            addWaterRect(leftMargin, 8.6f, 5.0f, 7.4f);
+            // Water blocks
+            addWaterRect(water3Left, water3Right, topBandTop, bottomBandBottom);
+            addWaterRect(water3Right, columnLeft, topBandTop, topBandBottom);
+            addWaterRect(columnLeft, waterRight, topBandTop, topBandBottom);
+            addWaterRect(water3Right, columnLeft, lowerBridgeTop, bottomBandTop);
+            addWaterRect(columnLeft, waterRight, bottomBandTop, bottomBandBottom);
 
-            // 4) Left upper vertical block (upper part of the U-turn pocket)
-            addWaterRect(leftMargin, 8.6f, 8.8f, 10.8f);
-
-            // 5) Mid-right slab to pinch the return path slightly
-            addWaterRect(16.5f, 25.5f, 5.8f, 7.8f);
-
-            // Horizontal wall: touches the right wall, spans ~80% width, forces the left-side U-turn
-            float wallLen = level.width * 0.80f;
-            float wallHalfW = wallLen * 0.5f;
-            float wallCenterX = (level.width - wallThick) - wallHalfW; // anchor on right wall
+            // Horizontal wall anchored on the right, forcing the U-turn on the far left
+            float wallY = 7.5f;
             float wallHalfH = 0.15f;
-            float wallY = 8.0f;
+            float wallLeft = water3Right;
+            float wallRight = level.width - wallThick;
+            float wallHalfW = (wallRight - wallLeft) * 0.5f;
+            float wallCenterX = wallLeft + wallHalfW;
             level.walls.push_back({b2Vec2(wallCenterX, wallY), b2Vec2(wallHalfW, wallHalfH)});
+
+            // Small vertical stub at the wall's left end (extends downward)
+            float stubHalfW = 0.15f;
+            float stubHalfH = 0.9f;
+            float stubCenterX = wallLeft;
+            float stubCenterY = (wallY + wallHalfH) + stubHalfH;
+            level.walls.push_back({b2Vec2(stubCenterX, stubCenterY), b2Vec2(stubHalfW, stubHalfH)});
 
             return level;
         }
