@@ -136,6 +136,50 @@ public:
 
             return level;
         }
+
+        if (id == 4)
+        {
+            // Level 4: randomly placed static water rectangles; start top-left, hole bottom-right.
+            // putting water near edges to prevent players hugging the edge.
+            float margin = 1.5f;
+            level.ballStartPos.Set(wallThick + margin, wallThick + margin); // top-left
+            level.holePos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
+
+            // Scatter water rectangles; leave gaps wide enough for the ball in some spots
+            auto addWater = [&](float cx, float cy, float hx, float hy) {
+                level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
+            };
+
+            float wSmallX = 1.6f, wSmallY = 1.2f;
+            float wMedX = 2.0f,  wMedY = 1.5f;
+
+            addWater(level.width * 0.26f, level.height * 0.22f, wMedX, wMedY);
+            addWater(level.width * 0.58f, level.height * 0.20f, wMedX, wSmallY);
+            addWater(level.width * 0.80f, level.height * 0.32f, wSmallX, wMedY);
+            addWater(level.width * 0.22f, level.height * 0.50f, wSmallX, wMedY);
+            addWater(level.width * 0.50f, level.height * 0.50f, wMedX, wMedY);
+            addWater(level.width * 0.76f, level.height * 0.52f, wSmallX, wMedY);
+            addWater(level.width * 0.30f, level.height * 0.74f, wMedX, wSmallY);
+            addWater(level.width * 0.56f, level.height * 0.78f, wSmallX, wSmallY);
+            addWater(level.width * 0.80f, level.height * 0.72f, wSmallX, wSmallY);
+
+            // water strips on the edges to block wall hugging (leave small gaps near start/hole)
+            float edgeXGap = wallThick + 1.0f;
+            float edgeStripHalfW = 0.6f;
+            float edgeStripHalfH = 2.0f;
+            // Left edge strips (avoiding start corner)
+            addWater(edgeXGap, level.height * 0.35f, edgeStripHalfW, edgeStripHalfH);
+            addWater(edgeXGap, level.height * 0.80f, edgeStripHalfW, edgeStripHalfH);
+            // Right edge strips
+            addWater(level.width - edgeXGap, level.height * 0.40f, edgeStripHalfW, edgeStripHalfH);
+            addWater(level.width - edgeXGap, level.height * 0.78f, edgeStripHalfW, edgeStripHalfH);
+            // Top  
+            addWater(level.width * 0.60f, wallThick + 0.8f, 3.0f, 0.6f);
+            // Bottom 
+            addWater(level.width * 0.50f, level.height - wallThick - 0.8f, 4.0f, 0.6f);
+
+            return level;
+        }
         // Default Level (id == 1 or others): three evenly spaced horizontal walls and a flag at the hole.
         // Layout: start near top-left, hole near bottom-left. Walls sit at 1/4, 1/2, 3/4 height and alternate which side they touch (L, R, L)
         float margin = 1.5f; // meters from inner border for start/hole placement
