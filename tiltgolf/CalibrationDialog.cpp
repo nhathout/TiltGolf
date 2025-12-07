@@ -1,8 +1,8 @@
 #include "CalibrationDialog.h"
-#include <QLabel>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QGuiApplication>
 #include <QScreen> // <-- required to use QScreen (was causing the incomplete type error)
 

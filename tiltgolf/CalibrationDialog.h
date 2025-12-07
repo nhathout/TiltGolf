@@ -1,7 +1,7 @@
 #ifndef CALIBRATIONDIALOG_H
 #define CALIBRATIONDIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 
 class QLabel;
 class QPushButton;
