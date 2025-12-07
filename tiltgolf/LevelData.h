@@ -180,6 +180,42 @@ public:
 
             return level;
         }
+
+        if (id == 5)
+        {
+            // Level 5: thin bridge between two large water pools.
+            float margin = 1.2f;
+            level.ballStartPos.Set(wallThick + margin, wallThick + margin); // near top-left
+            level.holePos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
+
+            // bridge
+            float corridorHeight = 2.0f;      // clear path height
+            float corridorCenterY = level.height * 0.55f; 
+
+            // Upper water rect
+            float upperHalfH = corridorCenterY - corridorHeight * 0.5f - wallThick - 0.3f;
+            float upperCenterY = wallThick + upperHalfH;
+
+            // Lower water rect
+            float lowerHalfH = level.height - (corridorCenterY + corridorHeight * 0.5f) - wallThick - 0.3f;
+            float lowerCenterY = level.height - wallThick - lowerHalfH;
+
+            // Water spans most of the width, leaving small dry margins
+            float waterHalfW = level.width * 0.44f;
+            float waterCenterX = level.width * 0.52f;
+
+            // Two big water rects
+            level.water.push_back({b2Vec2(waterCenterX, upperCenterY), b2Vec2(waterHalfW, upperHalfH)});
+            level.water.push_back({b2Vec2(waterCenterX, lowerCenterY), b2Vec2(waterHalfW, lowerHalfH)});
+
+            // small walls
+            // Near start: vertical post
+            level.walls.push_back({b2Vec2(wallThick + 2.8f, corridorCenterY), b2Vec2(0.2f, 0.9f)});
+            // Mid-corridor: horizontal bumper to redirect into water if hit hard
+            level.walls.push_back({b2Vec2(level.width * 0.55f, corridorCenterY), b2Vec2(1.0f, 0.15f)});
+
+            return level;
+        }
         // Default Level (id == 1 or others): three evenly spaced horizontal walls and a flag at the hole.
         // Layout: start near top-left, hole near bottom-left. Walls sit at 1/4, 1/2, 3/4 height and alternate which side they touch (L, R, L)
         float margin = 1.5f; // meters from inner border for start/hole placement
