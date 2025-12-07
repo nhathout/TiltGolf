@@ -236,32 +236,47 @@ public:
 
         if (id == 6)
         {
-            // Level 6: hardest. Start bottom-right, finish top-right. Long thin lane between huge water rects.
+            // Level 6: U-turn path with stacked pools and right-side gap (same gap as level 5).
             float margin = 1.3f;
             level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
             level.holePos.Set(level.width - wallThick - margin, wallThick + margin); // top-right
 
-            auto addWater = [&](float cx, float cy, float hx, float hy) {
+            float ballDiameter = 0.5f * 2.0f;
+            float gap = ballDiameter * 2.0f; // 2m dry strip on the right
+            float rightGapLeft = level.width - wallThick - gap;
+            float leftMargin = wallThick + 0.6f;
+            float rightInset = 0.4f; // keep water slightly off the right gap wall
+
+            auto addWaterRect = [&](float x1, float x2, float yTop, float yBottom) {
+                float cx = (x1 + x2) * 0.5f;
+                float hx = (x2 - x1) * 0.5f;
+                float cy = (yTop + yBottom) * 0.5f;
+                float hy = (yBottom - yTop) * 0.5f;
                 level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
             };
 
-            // Lane parameters
-            float laneH = 2.0f; // path height
-            float laneCenterY = level.height * 0.52f;
+            // 1) Bottom pool
+            addWaterRect(leftMargin, rightGapLeft - rightInset, level.height - 3.8f, level.height - wallThick - 0.2f);
 
-            // Huge upper and lower water rects enclosing the lane
-            float upperHalfH = laneCenterY - laneH * 0.5f - wallThick - 0.4f;
-            float lowerHalfH = level.height - (laneCenterY + laneH * 0.5f) - wallThick - 0.4f;
-            float poolHalfW = level.width * 0.46f;
-            float poolCenterX = level.width * 0.5f;
-            addWater(poolCenterX, wallThick + upperHalfH, poolHalfW, upperHalfH);
-            addWater(poolCenterX, level.height - wallThick - lowerHalfH, poolHalfW, lowerHalfH);
+            // 2) Top pool
+            addWaterRect(leftMargin, rightGapLeft - rightInset, wallThick + 0.2f, 3.6f);
 
-            // Left pocket water to force U-turn
-            addWater(wallThick + 3.5f, level.height * 0.52f, 2.5f, 2.5f);
+            // 3) Left lower vertical block (forms the lower part of the U-turn pocket)
+            addWaterRect(leftMargin, 8.6f, 5.0f, 7.4f);
 
-            // Notch on right side to prevent hugging near the finish
-            addWater(level.width - wallThick - 1.0f, level.height * 0.40f, 0.8f, 1.0f);
+            // 4) Left upper vertical block (upper part of the U-turn pocket)
+            addWaterRect(leftMargin, 8.6f, 8.8f, 10.8f);
+
+            // 5) Mid-right slab to pinch the return path slightly
+            addWaterRect(16.5f, 25.5f, 5.8f, 7.8f);
+
+            // Horizontal wall: touches the right wall, spans ~80% width, forces the left-side U-turn
+            float wallLen = level.width * 0.80f;
+            float wallHalfW = wallLen * 0.5f;
+            float wallCenterX = (level.width - wallThick) - wallHalfW; // anchor on right wall
+            float wallHalfH = 0.15f;
+            float wallY = 8.0f;
+            level.walls.push_back({b2Vec2(wallCenterX, wallY), b2Vec2(wallHalfW, wallHalfH)});
 
             return level;
         }
