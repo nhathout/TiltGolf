@@ -101,7 +101,6 @@ SOURCES       = Box2D/src/dynamics/b2_body.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
 		GameScreen.cpp \
-		CalibrationDialog.cpp \
 		IMU.cpp \
 		GameView.cpp \
 		GameController.cpp \
@@ -109,8 +108,7 @@ SOURCES       = Box2D/src/dynamics/b2_body.cpp \
 		moc_MenuScreen.cpp \
 		moc_GameScreen.cpp \
 		moc_GameView.cpp \
-		moc_GameController.cpp \
-		moc_CalibrationDialog.cpp
+		moc_GameController.cpp
 OBJECTS       = b2_body.o \
 		b2_chain_circle_contact.o \
 		b2_chain_polygon_contact.o \
@@ -160,7 +158,6 @@ OBJECTS       = b2_body.o \
 		MainWindow.o \
 		MenuScreen.o \
 		GameScreen.o \
-		CalibrationDialog.o \
 		IMU.o \
 		GameView.o \
 		GameController.o \
@@ -169,8 +166,7 @@ OBJECTS       = b2_body.o \
 		moc_MenuScreen.o \
 		moc_GameScreen.o \
 		moc_GameView.o \
-		moc_GameController.o \
-		moc_CalibrationDialog.o
+		moc_GameController.o
 DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/spec_pre.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/unix.conf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/linux.conf \
@@ -533,8 +529,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h CalibrationDialog.h IMU.h GameView.h GameController.h PhysicsEngine.h LevelData.h $(DISTDIR)/
-	$(COPY_FILE) --parents Box2D/src/dynamics/b2_body.cpp Box2D/src/dynamics/b2_chain_circle_contact.cpp Box2D/src/dynamics/b2_chain_polygon_contact.cpp Box2D/src/dynamics/b2_circle_contact.cpp Box2D/src/dynamics/b2_contact_manager.cpp Box2D/src/dynamics/b2_contact_solver.cpp Box2D/src/dynamics/b2_contact.cpp Box2D/src/dynamics/b2_distance_joint.cpp Box2D/src/dynamics/b2_edge_circle_contact.cpp Box2D/src/dynamics/b2_edge_polygon_contact.cpp Box2D/src/dynamics/b2_fixture.cpp Box2D/src/dynamics/b2_friction_joint.cpp Box2D/src/dynamics/b2_gear_joint.cpp Box2D/src/dynamics/b2_island.cpp Box2D/src/dynamics/b2_joint.cpp Box2D/src/dynamics/b2_motor_joint.cpp Box2D/src/dynamics/b2_mouse_joint.cpp Box2D/src/dynamics/b2_polygon_circle_contact.cpp Box2D/src/dynamics/b2_polygon_contact.cpp Box2D/src/dynamics/b2_prismatic_joint.cpp Box2D/src/dynamics/b2_pulley_joint.cpp Box2D/src/dynamics/b2_revolute_joint.cpp Box2D/src/dynamics/b2_weld_joint.cpp Box2D/src/dynamics/b2_wheel_joint.cpp Box2D/src/dynamics/b2_world.cpp Box2D/src/dynamics/b2_world_callbacks.cpp Box2D/src/collision/b2_broad_phase.cpp Box2D/src/collision/b2_chain_shape.cpp Box2D/src/collision/b2_circle_shape.cpp Box2D/src/collision/b2_collide_circle.cpp Box2D/src/collision/b2_collide_edge.cpp Box2D/src/collision/b2_collide_polygon.cpp Box2D/src/collision/b2_collision.cpp Box2D/src/collision/b2_distance.cpp Box2D/src/collision/b2_dynamic_tree.cpp Box2D/src/collision/b2_edge_shape.cpp Box2D/src/collision/b2_polygon_shape.cpp Box2D/src/collision/b2_time_of_impact.cpp Box2D/src/common/b2_block_allocator.cpp Box2D/src/common/b2_draw.cpp Box2D/src/common/b2_math.cpp Box2D/src/common/b2_settings.cpp Box2D/src/common/b2_stack_allocator.cpp Box2D/src/common/b2_timer.cpp Box2D/src/rope/b2_rope.cpp main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp CalibrationDialog.cpp IMU.cpp GameView.cpp GameController.cpp PhysicsEngine.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h IMU.h GameView.h GameController.h PhysicsEngine.h LevelData.h $(DISTDIR)/
+	$(COPY_FILE) --parents Box2D/src/dynamics/b2_body.cpp Box2D/src/dynamics/b2_chain_circle_contact.cpp Box2D/src/dynamics/b2_chain_polygon_contact.cpp Box2D/src/dynamics/b2_circle_contact.cpp Box2D/src/dynamics/b2_contact_manager.cpp Box2D/src/dynamics/b2_contact_solver.cpp Box2D/src/dynamics/b2_contact.cpp Box2D/src/dynamics/b2_distance_joint.cpp Box2D/src/dynamics/b2_edge_circle_contact.cpp Box2D/src/dynamics/b2_edge_polygon_contact.cpp Box2D/src/dynamics/b2_fixture.cpp Box2D/src/dynamics/b2_friction_joint.cpp Box2D/src/dynamics/b2_gear_joint.cpp Box2D/src/dynamics/b2_island.cpp Box2D/src/dynamics/b2_joint.cpp Box2D/src/dynamics/b2_motor_joint.cpp Box2D/src/dynamics/b2_mouse_joint.cpp Box2D/src/dynamics/b2_polygon_circle_contact.cpp Box2D/src/dynamics/b2_polygon_contact.cpp Box2D/src/dynamics/b2_prismatic_joint.cpp Box2D/src/dynamics/b2_pulley_joint.cpp Box2D/src/dynamics/b2_revolute_joint.cpp Box2D/src/dynamics/b2_weld_joint.cpp Box2D/src/dynamics/b2_wheel_joint.cpp Box2D/src/dynamics/b2_world.cpp Box2D/src/dynamics/b2_world_callbacks.cpp Box2D/src/collision/b2_broad_phase.cpp Box2D/src/collision/b2_chain_shape.cpp Box2D/src/collision/b2_circle_shape.cpp Box2D/src/collision/b2_collide_circle.cpp Box2D/src/collision/b2_collide_edge.cpp Box2D/src/collision/b2_collide_polygon.cpp Box2D/src/collision/b2_collision.cpp Box2D/src/collision/b2_distance.cpp Box2D/src/collision/b2_dynamic_tree.cpp Box2D/src/collision/b2_edge_shape.cpp Box2D/src/collision/b2_polygon_shape.cpp Box2D/src/collision/b2_time_of_impact.cpp Box2D/src/common/b2_block_allocator.cpp Box2D/src/common/b2_draw.cpp Box2D/src/common/b2_math.cpp Box2D/src/common/b2_settings.cpp Box2D/src/common/b2_stack_allocator.cpp Box2D/src/common/b2_timer.cpp Box2D/src/rope/b2_rope.cpp main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMU.cpp GameView.cpp GameController.cpp PhysicsEngine.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -566,9 +562,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++ -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp moc_CalibrationDialog.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp moc_CalibrationDialog.cpp
+	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
 moc_MainWindow.cpp: MainWindow.h \
 		MenuScreen.h \
 		GameScreen.h \
@@ -676,11 +672,6 @@ moc_GameController.cpp: GameController.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
 	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameController.h -o moc_GameController.cpp
-
-moc_CalibrationDialog.cpp: CalibrationDialog.h \
-		moc_predefs.h \
-		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include CalibrationDialog.h -o moc_CalibrationDialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
