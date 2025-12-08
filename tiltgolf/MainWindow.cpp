@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	// main menu with unlocks
 	menu->setUnlockStates(unlockedLevels);
+	game->setTotalLevels(static_cast<int>(unlockedLevels.size()));
 
 	// Connect screen signals to main window slots
 	connect(menu, &MenuScreen::levelSelected, this, &MainWindow::startLevel);
@@ -37,12 +38,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 // Slot implementation: start a level (called from menu)
 void MainWindow::startLevel(int levelId) {
+	game->setFreePlayMode(menu->isFreePlayMode());
 	game->setLevel(levelId);
 	stack->setCurrentWidget(game);
 }
 
 // Slot implementation: return to main menu
 void MainWindow::returnToMenu() {
+	game->resetAttemptCounter();
 	stack->setCurrentWidget(menu);
 }
 

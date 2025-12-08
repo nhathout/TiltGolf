@@ -18,6 +18,9 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     topBar = new QHBoxLayout();
     
     levelId = 1;
+    attemptCount = 1;
+    freePlayActive = false;
+    totalLevels = 6;
     levelLabel = new QLabel(QString("Level %1").arg(1));
     timeElapsed = 0;
     timerLabel = new QLabel(QString("Time: %1").arg(timeElapsed));
@@ -42,8 +45,10 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
     setLayout(mainLayout);
 
-    // 4. Connect Signals
-    connect(restartButton, &QPushButton::clicked, this, &GameScreen::restartLevel);
+    connect(restartButton, &QPushButton::clicked, [this]() {
+        attemptCount++;
+        restartLevel();
+    });
 
     // Exit: pause the running controller before switching screens so the game loop stops
     connect(exitButton, &QPushButton::clicked, [this]()
@@ -119,10 +124,63 @@ void GameScreen::setLevel(int newLevelId) {
     levelLabel->setText(QString("Level %1").arg(levelId));
     controller->loadLevel(levelId);
     timeElapsed = 0;
+    attemptCount = 1;
+    timerLabel->setText("Time: 0");
 }
 
 void GameScreen::handleLevelComplete() {
-    QMessageBox::information(this, "Winner!", "You sank the ball!");
+    controller->pauseGame();
+
     emit levelComplete(levelId);
-    restartLevel(); // Or advance to next level
+
+    bool isLastLevel = (levelId >= totalLevels);
+
+    QMessageBox box(this);
+    box.setWindowTitle("Winner!");
+    box.setIcon(QMessageBox::Information);
+
+    // if the player actually finishes the whole game :o
+    QString heading = QString("Hole in %1!").arg(attemptCount);
+    QString note;
+    if (isLastLevel && !freePlayActive) {
+        note = "<div style='font-size:12px; color:#666;'>wow i really didnt think you would finish the whole game :o</div>";
+    }
+    QString text = QString("<h2>%1</h2>").arg(heading);
+    if (!note.isEmpty()) {
+        text += note;
+    }
+    box.setText(text);
+    box.setTextFormat(Qt::RichText);
+
+    QPushButton *replayBtn = box.addButton("Replay", QMessageBox::AcceptRole);
+    QPushButton *nextBtn = nullptr;
+    if (!isLastLevel) {
+        nextBtn = box.addButton("Next Level", QMessageBox::ActionRole);
+    }
+    QPushButton *menuBtn = box.addButton("Menu", QMessageBox::RejectRole);
+
+    box.exec();
+
+    if (box.clickedButton() == replayBtn) {
+        attemptCount = 1;
+        restartLevel();
+    } else if (nextBtn && box.clickedButton() == nextBtn) {
+        attemptCount = 1;
+        setLevel(levelId + 1);
+    } else {
+        attemptCount = 1;
+        emit exitToMenu();
+    }
+}
+
+void GameScreen::setFreePlayMode(bool enabled) {
+    freePlayActive = enabled;
+}
+
+void GameScreen::resetAttemptCounter() {
+    attemptCount = 1;
+}
+
+void GameScreen::setTotalLevels(int total) {
+    totalLevels = total;
 }
