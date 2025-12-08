@@ -237,9 +237,20 @@ public:
         if (id == 6)
         {
             // Level 6: dense water bands with ball-width corridors hugging the walls and a U-turn around the shifted vertical post.
-            float margin = 1.3f;
-            level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
-            level.holePos.Set(level.width - wallThick - margin, 2.2f); // top-right lane, right of the top pool
+            const float ballDiameter = 1.0f; // ball radius is 0.5m
+            float lane = ballDiameter;       // single-ball-width corridors
+
+            // Inner playfield bounds (inside boundary walls)
+            float innerLeft = wallThick * 2.0f;               // 1.0
+            float innerRight = level.width - wallThick * 2.0f; // 30.0
+            float innerTop = wallThick * 2.0f;                // 1.0
+            float innerBottom = level.height - wallThick * 2.0f; // 14.0
+
+            // Place start/hole centered in the right-side lane
+            float rightLaneLeft = innerRight - lane;
+            float rightLaneCenterX = rightLaneLeft + lane * 0.5f;
+            level.ballStartPos.Set(rightLaneCenterX, innerBottom - lane * 0.5f); // bottom-right lane
+            level.holePos.Set(rightLaneCenterX, innerTop + lane * 0.5f);         // top-right lane
 
             auto addWaterRect = [&](float x1, float x2, float yTop, float yBottom) {
                 float cx = (x1 + x2) * 0.5f;
@@ -249,29 +260,13 @@ public:
                 level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
             };
 
-            // Lay water so it hugs the walls with a ball-sized path and pushes farther toward the right wall.
-            const float ballDiameter = 1.0f; // ball radius is 0.5m
-            float wallGap = ballDiameter;     // ball-sized lane between walls/obstacles and water
-            float rightPocket = 1.6f;         // keeps start/hole dry while letting water reach farther right
-
-            // Inside faces of the outer walls
-            float innerLeft = wallThick * 2.0f;               // x = 1.0
-            float innerRight = level.width - wallThick * 2.0f; // x = 30.0
-            float innerTop = wallThick * 2.0f;                // y = 1.0
-            float innerBottom = level.height - wallThick * 2.0f; // y = 14.0
-
-            float waterLeft = innerLeft + wallGap;
-            float waterRight = innerRight - rightPocket;
-            float waterTop = innerTop + wallGap;
-            float waterBottom = innerBottom - wallGap;
-
-            // Wall placement: move the junction ~60% across from the right side
+            // Wall placement: move the junction ~70% across from the right side (further left)
             float wallY = 7.5f;
             float wallHalfH = 0.15f;
             float stubHalfW = 0.15f;
-            float stubHalfH = 1.0f;
-            float stubX = level.width * 0.40f; // ~40% from the left (~60% from the right)
-            float gap = wallGap;               // keep ball-width clearance around the walls
+            float stubHalfH = 1.4f;
+            float stubX = level.width * 0.30f; // ~30% from the left (~70% from the right)
+            float gap = lane;                  // keep ball-width clearance around the walls
 
             float topBandBottom = wallY - wallHalfH - gap;
             float bottomBandTop = wallY + wallHalfH + gap;
@@ -279,11 +274,17 @@ public:
             float leftStop = stubX - stubHalfW - gap;
             float rightStart = stubX + stubHalfW + gap;
 
-            // Water blocks: top/bottom bands split by the vertical lane around the stub
-            addWaterRect(waterLeft, leftStop, waterTop, topBandBottom);
-            addWaterRect(rightStart, waterRight, waterTop, topBandBottom);
-            addWaterRect(waterLeft, leftStop, bottomBandTop, waterBottom);
-            addWaterRect(rightStart, waterRight, bottomBandTop, waterBottom);
+            // Five water rectangles: left column, two connectors, and two large pools.
+            // Left column
+            addWaterRect(innerLeft, leftStop, innerTop, innerBottom);
+            // Upper connector into the top pool 
+            addWaterRect(leftStop, rightStart, innerTop, topBandBottom);
+            // Lower connector into the bottom pool 
+            addWaterRect(leftStop, rightStart, bottomBandTop, innerBottom);
+            // Top main pool 
+            addWaterRect(rightStart, rightLaneLeft, innerTop, topBandBottom);
+            // Bottom main pool
+            addWaterRect(rightStart, rightLaneLeft, bottomBandTop, innerBottom);
 
             // Horizontal wall anchored on the right, forcing the U-turn on the far left
             float wallLeft = stubX;
