@@ -76,7 +76,7 @@ void MenuScreen::setUnlockStates(const std::vector<bool>& states) {
 
 void MenuScreen::setFreePlayMode(bool enabled) {
 	freePlayMode = enabled;
-	freePlayButton->setText(enabled ? "Free Play (On)" : "Free Play");
+	freePlayButton->setText(enabled ? "Main Menu" : "Free Play");
 	refreshLevelButtons();
 }
 
