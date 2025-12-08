@@ -17,6 +17,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     mainLayout = new QVBoxLayout(this);
     topBar = new QHBoxLayout();
     
+    levelId = 1;
     levelLabel = new QLabel(QString("Level %1").arg(1));
     timeElapsed = 0;
     timerLabel = new QLabel(QString("Time: %1").arg(timeElapsed));
@@ -122,5 +123,6 @@ void GameScreen::setLevel(int newLevelId) {
 
 void GameScreen::handleLevelComplete() {
     QMessageBox::information(this, "Winner!", "You sank the ball!");
+    emit levelComplete(levelId);
     restartLevel(); // Or advance to next level
 }

@@ -25,6 +25,7 @@ public:
 
 signals:
     void exitToMenu();
+    void levelComplete(int levelId);
 
 private slots:
     void restartLevel();

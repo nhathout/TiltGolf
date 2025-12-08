@@ -5,6 +5,7 @@
 #include "GameScreen.h"
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <vector>
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -15,10 +16,12 @@ private:
 	QStackedWidget *stack;
 	MenuScreen *menu;
 	GameScreen *game;
+	std::vector<bool> unlockedLevels;
 
 private slots:
 	void startLevel(int levelId);
 	void returnToMenu();
+	void handleLevelComplete(int levelId);
 };
 
 #endif
