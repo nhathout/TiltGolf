@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	// Set up stack widget
 	stack = new QStackedWidget(this);
 	setCentralWidget(stack);
+
+	// start unlock state: only level 1 unlocked by default
+	unlockedLevels.assign(6, false);
+	unlockedLevels[0] = true;
 	
 	// Set up screens
 	menu = new MenuScreen(this);
@@ -18,9 +22,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	stack->addWidget(menu);
 	stack->addWidget(game);
 
+	// main menu with unlocks
+	menu->setUnlockStates(unlockedLevels);
+
 	// Connect screen signals to main window slots
 	connect(menu, &MenuScreen::levelSelected, this, &MainWindow::startLevel);
 	connect(game, &GameScreen::exitToMenu, this, &MainWindow::returnToMenu);
+	connect(game, &GameScreen::levelComplete, this, &MainWindow::handleLevelComplete);
 
 	// Open to menu in full screen
 	setWindowState(Qt::WindowFullScreen);
@@ -36,4 +44,15 @@ void MainWindow::startLevel(int levelId) {
 // Slot implementation: return to main menu
 void MainWindow::returnToMenu() {
 	stack->setCurrentWidget(menu);
+}
+
+// handles unlocks
+void MainWindow::handleLevelComplete(int levelId) {
+	int idx = levelId - 1;
+	if (idx >= 0 && idx + 1 < static_cast<int>(unlockedLevels.size())) {
+		if (!unlockedLevels[idx + 1]) {
+			unlockedLevels[idx + 1] = true;
+			menu->setUnlockStates(unlockedLevels);
+		}
+	}
 }
