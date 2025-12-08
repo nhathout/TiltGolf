@@ -236,21 +236,21 @@ public:
 
         if (id == 6)
         {
-            // Level 6: dense water bands with ball-width corridors hugging the walls and a U-turn around the shifted vertical post.
-            const float ballDiameter = 1.0f; // ball radius is 0.5m
-            float lane = ballDiameter;       // single-ball-width corridors
+            // Level 6: dangerous ball-width path and a U-turn around wall.
+            const float ballDiameter = 1.0f;
+            float lane = ballDiameter;       // corridors same width as ball diameter
 
-            // Inner playfield bounds (inside boundary walls)
+            // Inner playfield bounds 
             float innerLeft = wallThick * 2.0f;               // 1.0
             float innerRight = level.width - wallThick * 2.0f; // 30.0
             float innerTop = wallThick * 2.0f;                // 1.0
             float innerBottom = level.height - wallThick * 2.0f; // 14.0
 
-            // Place start/hole centered in the right-side lane
+            // Place start/hole centered on the right
             float rightLaneLeft = innerRight - lane;
             float rightLaneCenterX = rightLaneLeft + lane * 0.5f;
-            level.ballStartPos.Set(rightLaneCenterX, innerBottom - lane * 0.5f); // bottom-right lane
-            level.holePos.Set(rightLaneCenterX, innerTop + lane * 0.5f);         // top-right lane
+            level.ballStartPos.Set(rightLaneCenterX, innerBottom - lane * 0.5f); // bottom-right
+            level.holePos.Set(rightLaneCenterX, innerTop + lane * 0.5f);         // top-right
 
             auto addWaterRect = [&](float x1, float x2, float yTop, float yBottom) {
                 float cx = (x1 + x2) * 0.5f;
@@ -260,42 +260,42 @@ public:
                 level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
             };
 
-            // Wall placement: move the junction ~70% across from the right side (further left)
+            // Wall placement: ~70% across from the right side 
             float wallY = 7.5f;
             float wallHalfH = 0.15f;
             float stubHalfW = 0.15f;
             float stubHalfH = 1.4f;
-            float stubX = level.width * 0.30f; // ~30% from the left (~70% from the right)
+            float stubX = level.width * 0.30f; // ~30% from the left 
             float gap = lane;                  // keep ball-width clearance around the walls
 
             float topBandBottom = wallY - wallHalfH - gap;
             float bottomBandTop = wallY + wallHalfH + gap;
-            float upperConnectorBottom = topBandBottom - lane; // raise the lower edge of upper connector by one ball
-            float lowerConnectorTop = bottomBandTop + lane;    // drop the upper edge of lower connector by one ball
+            float upperConnectorBottom = topBandBottom - lane; 
+            float lowerConnectorTop = bottomBandTop + lane;    
 
             float leftStop = stubX - stubHalfW - gap;
             float rightStart = stubX + stubHalfW + gap;
 
-            // Five water rectangles: left column, two connectors, and two large pools.
+            // Five water rectangles: left column, two connectors, and two large water rects.
             // Left column
             addWaterRect(innerLeft, leftStop, innerTop, innerBottom);
-            // Upper connector into the top pool 
+            // Upper connector into the top water rect 
             addWaterRect(leftStop, rightStart, innerTop, upperConnectorBottom);
-            // Lower connector into the bottom pool 
+            // Lower connector into the bottom water rect 
             addWaterRect(leftStop, rightStart, lowerConnectorTop, innerBottom);
-            // Top main pool 
+            // Top main water rect 
             addWaterRect(rightStart, rightLaneLeft, innerTop, topBandBottom);
-            // Bottom main pool
+            // Bottom main water rect
             addWaterRect(rightStart, rightLaneLeft, bottomBandTop, innerBottom);
 
-            // Horizontal wall anchored on the right, forcing the U-turn on the far left
+            // Horizontal wall with the u-turn on the far left
             float wallLeft = stubX;
             float wallRight = level.width - wallThick;
             float wallHalfW = (wallRight - wallLeft) * 0.5f;
             float wallCenterX = wallLeft + wallHalfW;
             level.walls.push_back({b2Vec2(wallCenterX, wallY), b2Vec2(wallHalfW, wallHalfH)});
 
-            // Small vertical stub at the wall's left end; centered so the horizontal meets its midpoint
+            // Small vertical wall
             float stubCenterX = stubX;
             float stubCenterY = wallY; // centered on the horizontal wall
             level.walls.push_back({b2Vec2(stubCenterX, stubCenterY), b2Vec2(stubHalfW, stubHalfH)});
