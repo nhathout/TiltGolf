@@ -16,8 +16,8 @@ CC            = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin
 CXX           = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I. -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++
+CXXFLAGS      = -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I. -I. -IBox2D/include -IBox2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I. -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++
 QMAKE         = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = tiltgolf1.0.0
 DISTDIR = /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/.tmp/tiltgolf1.0.0
 LINK          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++
 LFLAGS        = --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1
-LIBS          = $(SUBLIBS) -latomic /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Widgets.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread  -lrt -lpthread -ldl 
+LIBS          = $(SUBLIBS) -latomic -lm /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Widgets.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread  -lrt -lpthread -ldl 
 AR            = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-ar cqs
 RANLIB        = 
 SED           = sed
@@ -52,19 +52,121 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
+SOURCES       = Box2D/src/dynamics/b2_body.cpp \
+		Box2D/src/dynamics/b2_chain_circle_contact.cpp \
+		Box2D/src/dynamics/b2_chain_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_circle_contact.cpp \
+		Box2D/src/dynamics/b2_contact_manager.cpp \
+		Box2D/src/dynamics/b2_contact_solver.cpp \
+		Box2D/src/dynamics/b2_contact.cpp \
+		Box2D/src/dynamics/b2_distance_joint.cpp \
+		Box2D/src/dynamics/b2_edge_circle_contact.cpp \
+		Box2D/src/dynamics/b2_edge_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_fixture.cpp \
+		Box2D/src/dynamics/b2_friction_joint.cpp \
+		Box2D/src/dynamics/b2_gear_joint.cpp \
+		Box2D/src/dynamics/b2_island.cpp \
+		Box2D/src/dynamics/b2_joint.cpp \
+		Box2D/src/dynamics/b2_motor_joint.cpp \
+		Box2D/src/dynamics/b2_mouse_joint.cpp \
+		Box2D/src/dynamics/b2_polygon_circle_contact.cpp \
+		Box2D/src/dynamics/b2_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_prismatic_joint.cpp \
+		Box2D/src/dynamics/b2_pulley_joint.cpp \
+		Box2D/src/dynamics/b2_revolute_joint.cpp \
+		Box2D/src/dynamics/b2_weld_joint.cpp \
+		Box2D/src/dynamics/b2_wheel_joint.cpp \
+		Box2D/src/dynamics/b2_world.cpp \
+		Box2D/src/dynamics/b2_world_callbacks.cpp \
+		Box2D/src/collision/b2_broad_phase.cpp \
+		Box2D/src/collision/b2_chain_shape.cpp \
+		Box2D/src/collision/b2_circle_shape.cpp \
+		Box2D/src/collision/b2_collide_circle.cpp \
+		Box2D/src/collision/b2_collide_edge.cpp \
+		Box2D/src/collision/b2_collide_polygon.cpp \
+		Box2D/src/collision/b2_collision.cpp \
+		Box2D/src/collision/b2_distance.cpp \
+		Box2D/src/collision/b2_dynamic_tree.cpp \
+		Box2D/src/collision/b2_edge_shape.cpp \
+		Box2D/src/collision/b2_polygon_shape.cpp \
+		Box2D/src/collision/b2_time_of_impact.cpp \
+		Box2D/src/common/b2_block_allocator.cpp \
+		Box2D/src/common/b2_draw.cpp \
+		Box2D/src/common/b2_math.cpp \
+		Box2D/src/common/b2_settings.cpp \
+		Box2D/src/common/b2_stack_allocator.cpp \
+		Box2D/src/common/b2_timer.cpp \
+		Box2D/src/rope/b2_rope.cpp \
+		main.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
-		GameScreen.cpp moc_MainWindow.cpp \
+		GameScreen.cpp \
+		IMU.cpp \
+		GameView.cpp \
+		GameController.cpp \
+		PhysicsEngine.cpp moc_MainWindow.cpp \
 		moc_MenuScreen.cpp \
-		moc_GameScreen.cpp
-OBJECTS       = main.o \
+		moc_GameScreen.cpp \
+		moc_GameView.cpp \
+		moc_GameController.cpp
+OBJECTS       = b2_body.o \
+		b2_chain_circle_contact.o \
+		b2_chain_polygon_contact.o \
+		b2_circle_contact.o \
+		b2_contact_manager.o \
+		b2_contact_solver.o \
+		b2_contact.o \
+		b2_distance_joint.o \
+		b2_edge_circle_contact.o \
+		b2_edge_polygon_contact.o \
+		b2_fixture.o \
+		b2_friction_joint.o \
+		b2_gear_joint.o \
+		b2_island.o \
+		b2_joint.o \
+		b2_motor_joint.o \
+		b2_mouse_joint.o \
+		b2_polygon_circle_contact.o \
+		b2_polygon_contact.o \
+		b2_prismatic_joint.o \
+		b2_pulley_joint.o \
+		b2_revolute_joint.o \
+		b2_weld_joint.o \
+		b2_wheel_joint.o \
+		b2_world.o \
+		b2_world_callbacks.o \
+		b2_broad_phase.o \
+		b2_chain_shape.o \
+		b2_circle_shape.o \
+		b2_collide_circle.o \
+		b2_collide_edge.o \
+		b2_collide_polygon.o \
+		b2_collision.o \
+		b2_distance.o \
+		b2_dynamic_tree.o \
+		b2_edge_shape.o \
+		b2_polygon_shape.o \
+		b2_time_of_impact.o \
+		b2_block_allocator.o \
+		b2_draw.o \
+		b2_math.o \
+		b2_settings.o \
+		b2_stack_allocator.o \
+		b2_timer.o \
+		b2_rope.o \
+		main.o \
 		MainWindow.o \
 		MenuScreen.o \
 		GameScreen.o \
+		IMU.o \
+		GameView.o \
+		GameController.o \
+		PhysicsEngine.o \
 		moc_MainWindow.o \
 		moc_MenuScreen.o \
-		moc_GameScreen.o
+		moc_GameScreen.o \
+		moc_GameView.o \
+		moc_GameController.o
 DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/spec_pre.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/unix.conf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/common/linux.conf \
@@ -140,6 +242,7 @@ DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mks
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/exclusive_builds.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/toolchain.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_pre.prf \
+		Box2D.pri \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/resolve_config.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_post.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/warn_on.prf \
@@ -157,10 +260,64 @@ DIST          = /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mks
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/lex.prf \
 		tiltgolf.pro MainWindow.h \
 		MenuScreen.h \
-		GameScreen.h main.cpp \
+		GameScreen.h \
+		IMU.h \
+		GameView.h \
+		GameController.h \
+		PhysicsEngine.h \
+		LevelData.h Box2D/src/dynamics/b2_body.cpp \
+		Box2D/src/dynamics/b2_chain_circle_contact.cpp \
+		Box2D/src/dynamics/b2_chain_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_circle_contact.cpp \
+		Box2D/src/dynamics/b2_contact_manager.cpp \
+		Box2D/src/dynamics/b2_contact_solver.cpp \
+		Box2D/src/dynamics/b2_contact.cpp \
+		Box2D/src/dynamics/b2_distance_joint.cpp \
+		Box2D/src/dynamics/b2_edge_circle_contact.cpp \
+		Box2D/src/dynamics/b2_edge_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_fixture.cpp \
+		Box2D/src/dynamics/b2_friction_joint.cpp \
+		Box2D/src/dynamics/b2_gear_joint.cpp \
+		Box2D/src/dynamics/b2_island.cpp \
+		Box2D/src/dynamics/b2_joint.cpp \
+		Box2D/src/dynamics/b2_motor_joint.cpp \
+		Box2D/src/dynamics/b2_mouse_joint.cpp \
+		Box2D/src/dynamics/b2_polygon_circle_contact.cpp \
+		Box2D/src/dynamics/b2_polygon_contact.cpp \
+		Box2D/src/dynamics/b2_prismatic_joint.cpp \
+		Box2D/src/dynamics/b2_pulley_joint.cpp \
+		Box2D/src/dynamics/b2_revolute_joint.cpp \
+		Box2D/src/dynamics/b2_weld_joint.cpp \
+		Box2D/src/dynamics/b2_wheel_joint.cpp \
+		Box2D/src/dynamics/b2_world.cpp \
+		Box2D/src/dynamics/b2_world_callbacks.cpp \
+		Box2D/src/collision/b2_broad_phase.cpp \
+		Box2D/src/collision/b2_chain_shape.cpp \
+		Box2D/src/collision/b2_circle_shape.cpp \
+		Box2D/src/collision/b2_collide_circle.cpp \
+		Box2D/src/collision/b2_collide_edge.cpp \
+		Box2D/src/collision/b2_collide_polygon.cpp \
+		Box2D/src/collision/b2_collision.cpp \
+		Box2D/src/collision/b2_distance.cpp \
+		Box2D/src/collision/b2_dynamic_tree.cpp \
+		Box2D/src/collision/b2_edge_shape.cpp \
+		Box2D/src/collision/b2_polygon_shape.cpp \
+		Box2D/src/collision/b2_time_of_impact.cpp \
+		Box2D/src/common/b2_block_allocator.cpp \
+		Box2D/src/common/b2_draw.cpp \
+		Box2D/src/common/b2_math.cpp \
+		Box2D/src/common/b2_settings.cpp \
+		Box2D/src/common/b2_stack_allocator.cpp \
+		Box2D/src/common/b2_timer.cpp \
+		Box2D/src/rope/b2_rope.cpp \
+		main.cpp \
 		MainWindow.cpp \
 		MenuScreen.cpp \
-		GameScreen.cpp
+		GameScreen.cpp \
+		IMU.cpp \
+		GameView.cpp \
+		GameController.cpp \
+		PhysicsEngine.cpp
 QMAKE_TARGET  = tiltgolf
 DESTDIR       = 
 TARGET        = tiltgolf
@@ -247,6 +404,7 @@ Makefile: tiltgolf.pro /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/h
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/exclusive_builds.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/toolchain.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_pre.prf \
+		Box2D.pri \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/resolve_config.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_post.prf \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/warn_on.prf \
@@ -339,6 +497,7 @@ Makefile: tiltgolf.pro /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/h
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/exclusive_builds.prf:
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/toolchain.prf:
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_pre.prf:
+Box2D.pri:
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/resolve_config.prf:
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/default_post.prf:
 /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/warn_on.prf:
@@ -370,8 +529,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.h MenuScreen.h GameScreen.h IMU.h GameView.h GameController.h PhysicsEngine.h LevelData.h $(DISTDIR)/
+	$(COPY_FILE) --parents Box2D/src/dynamics/b2_body.cpp Box2D/src/dynamics/b2_chain_circle_contact.cpp Box2D/src/dynamics/b2_chain_polygon_contact.cpp Box2D/src/dynamics/b2_circle_contact.cpp Box2D/src/dynamics/b2_contact_manager.cpp Box2D/src/dynamics/b2_contact_solver.cpp Box2D/src/dynamics/b2_contact.cpp Box2D/src/dynamics/b2_distance_joint.cpp Box2D/src/dynamics/b2_edge_circle_contact.cpp Box2D/src/dynamics/b2_edge_polygon_contact.cpp Box2D/src/dynamics/b2_fixture.cpp Box2D/src/dynamics/b2_friction_joint.cpp Box2D/src/dynamics/b2_gear_joint.cpp Box2D/src/dynamics/b2_island.cpp Box2D/src/dynamics/b2_joint.cpp Box2D/src/dynamics/b2_motor_joint.cpp Box2D/src/dynamics/b2_mouse_joint.cpp Box2D/src/dynamics/b2_polygon_circle_contact.cpp Box2D/src/dynamics/b2_polygon_contact.cpp Box2D/src/dynamics/b2_prismatic_joint.cpp Box2D/src/dynamics/b2_pulley_joint.cpp Box2D/src/dynamics/b2_revolute_joint.cpp Box2D/src/dynamics/b2_weld_joint.cpp Box2D/src/dynamics/b2_wheel_joint.cpp Box2D/src/dynamics/b2_world.cpp Box2D/src/dynamics/b2_world_callbacks.cpp Box2D/src/collision/b2_broad_phase.cpp Box2D/src/collision/b2_chain_shape.cpp Box2D/src/collision/b2_circle_shape.cpp Box2D/src/collision/b2_collide_circle.cpp Box2D/src/collision/b2_collide_edge.cpp Box2D/src/collision/b2_collide_polygon.cpp Box2D/src/collision/b2_collision.cpp Box2D/src/collision/b2_distance.cpp Box2D/src/collision/b2_dynamic_tree.cpp Box2D/src/collision/b2_edge_shape.cpp Box2D/src/collision/b2_polygon_shape.cpp Box2D/src/collision/b2_time_of_impact.cpp Box2D/src/common/b2_block_allocator.cpp Box2D/src/common/b2_draw.cpp Box2D/src/common/b2_math.cpp Box2D/src/common/b2_settings.cpp Box2D/src/common/b2_stack_allocator.cpp Box2D/src/common/b2_timer.cpp Box2D/src/rope/b2_rope.cpp main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp IMU.cpp GameView.cpp GameController.cpp PhysicsEngine.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -401,27 +560,118 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++ -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wall -Wextra -dM -E -o moc_predefs.h /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/arm-linux-g++ -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp
+	-$(DEL_FILE) moc_MainWindow.cpp moc_MenuScreen.cpp moc_GameScreen.cpp moc_GameView.cpp moc_GameController.cpp
 moc_MainWindow.cpp: MainWindow.h \
 		MenuScreen.h \
 		GameScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MainWindow.h -o moc_MainWindow.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MainWindow.h -o moc_MainWindow.cpp
 
 moc_MenuScreen.cpp: MenuScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MenuScreen.h -o moc_MenuScreen.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include MenuScreen.h -o moc_MenuScreen.cpp
 
 moc_GameScreen.cpp: GameScreen.h \
 		moc_predefs.h \
 		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
-	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameScreen.h -o moc_GameScreen.cpp
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameScreen.h -o moc_GameScreen.cpp
+
+moc_GameView.cpp: GameView.h \
+		GameController.h \
+		PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h \
+		moc_predefs.h \
+		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameView.h -o moc_GameView.cpp
+
+moc_GameController.cpp: GameController.h \
+		PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h \
+		moc_predefs.h \
+		/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc
+	/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/bin/moc $(DEFINES) --include /ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/moc_predefs.h -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/mkspecs/devices/linux-buildroot-g++ -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/include -I/ad/eng/users/b/e/betaylor/EC535/TiltGolf/tiltgolf/Box2D/src -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtWidgets -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0 -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/arm-buildroot-linux-gnueabihf -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/backward -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/9.3.0/include-fixed -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/opt/ext-toolchain/arm-buildroot-linux-gnueabihf/include -I/ad/eng/courses/ec/ec535/bbb/buildroot-2021.02.1/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include GameController.h -o moc_GameController.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -439,6 +689,657 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
+b2_body.o: Box2D/src/dynamics/b2_body.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_body.o Box2D/src/dynamics/b2_body.cpp
+
+b2_chain_circle_contact.o: Box2D/src/dynamics/b2_chain_circle_contact.cpp Box2D/src/dynamics/b2_chain_circle_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_chain_circle_contact.o Box2D/src/dynamics/b2_chain_circle_contact.cpp
+
+b2_chain_polygon_contact.o: Box2D/src/dynamics/b2_chain_polygon_contact.cpp Box2D/src/dynamics/b2_chain_polygon_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_chain_polygon_contact.o Box2D/src/dynamics/b2_chain_polygon_contact.cpp
+
+b2_circle_contact.o: Box2D/src/dynamics/b2_circle_contact.cpp Box2D/src/dynamics/b2_circle_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_time_of_impact.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_circle_contact.o Box2D/src/dynamics/b2_circle_contact.cpp
+
+b2_contact_manager.o: Box2D/src/dynamics/b2_contact_manager.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_contact_manager.o Box2D/src/dynamics/b2_contact_manager.cpp
+
+b2_contact_solver.o: Box2D/src/dynamics/b2_contact_solver.cpp Box2D/src/dynamics/b2_contact_solver.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_contact_solver.o Box2D/src/dynamics/b2_contact_solver.cpp
+
+b2_contact.o: Box2D/src/dynamics/b2_contact.cpp Box2D/src/dynamics/b2_chain_circle_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/src/dynamics/b2_chain_polygon_contact.h \
+		Box2D/src/dynamics/b2_circle_contact.h \
+		Box2D/src/dynamics/b2_contact_solver.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/src/dynamics/b2_edge_circle_contact.h \
+		Box2D/src/dynamics/b2_edge_polygon_contact.h \
+		Box2D/src/dynamics/b2_polygon_circle_contact.h \
+		Box2D/src/dynamics/b2_polygon_contact.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_time_of_impact.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_contact.o Box2D/src/dynamics/b2_contact.cpp
+
+b2_distance_joint.o: Box2D/src/dynamics/b2_distance_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_distance_joint.o Box2D/src/dynamics/b2_distance_joint.cpp
+
+b2_edge_circle_contact.o: Box2D/src/dynamics/b2_edge_circle_contact.cpp Box2D/src/dynamics/b2_edge_circle_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_edge_circle_contact.o Box2D/src/dynamics/b2_edge_circle_contact.cpp
+
+b2_edge_polygon_contact.o: Box2D/src/dynamics/b2_edge_polygon_contact.cpp Box2D/src/dynamics/b2_edge_polygon_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_edge_polygon_contact.o Box2D/src/dynamics/b2_edge_polygon_contact.cpp
+
+b2_fixture.o: Box2D/src/dynamics/b2_fixture.cpp Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_fixture.o Box2D/src/dynamics/b2_fixture.cpp
+
+b2_friction_joint.o: Box2D/src/dynamics/b2_friction_joint.cpp Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_friction_joint.o Box2D/src/dynamics/b2_friction_joint.cpp
+
+b2_gear_joint.o: Box2D/src/dynamics/b2_gear_joint.cpp Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_gear_joint.o Box2D/src/dynamics/b2_gear_joint.cpp
+
+b2_island.o: Box2D/src/dynamics/b2_island.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/src/dynamics/b2_island.h \
+		Box2D/src/dynamics/b2_contact_solver.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_island.o Box2D/src/dynamics/b2_island.cpp
+
+b2_joint.o: Box2D/src/dynamics/b2_joint.cpp Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_joint.o Box2D/src/dynamics/b2_joint.cpp
+
+b2_motor_joint.o: Box2D/src/dynamics/b2_motor_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_motor_joint.o Box2D/src/dynamics/b2_motor_joint.cpp
+
+b2_mouse_joint.o: Box2D/src/dynamics/b2_mouse_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_mouse_joint.o Box2D/src/dynamics/b2_mouse_joint.cpp
+
+b2_polygon_circle_contact.o: Box2D/src/dynamics/b2_polygon_circle_contact.cpp Box2D/src/dynamics/b2_polygon_circle_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_polygon_circle_contact.o Box2D/src/dynamics/b2_polygon_circle_contact.cpp
+
+b2_polygon_contact.o: Box2D/src/dynamics/b2_polygon_contact.cpp Box2D/src/dynamics/b2_polygon_contact.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_time_of_impact.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_polygon_contact.o Box2D/src/dynamics/b2_polygon_contact.cpp
+
+b2_prismatic_joint.o: Box2D/src/dynamics/b2_prismatic_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_prismatic_joint.o Box2D/src/dynamics/b2_prismatic_joint.cpp
+
+b2_pulley_joint.o: Box2D/src/dynamics/b2_pulley_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_pulley_joint.o Box2D/src/dynamics/b2_pulley_joint.cpp
+
+b2_revolute_joint.o: Box2D/src/dynamics/b2_revolute_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_revolute_joint.o Box2D/src/dynamics/b2_revolute_joint.cpp
+
+b2_weld_joint.o: Box2D/src/dynamics/b2_weld_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_joint.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_weld_joint.o Box2D/src/dynamics/b2_weld_joint.cpp
+
+b2_wheel_joint.o: Box2D/src/dynamics/b2_wheel_joint.cpp Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_step.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_wheel_joint.o Box2D/src/dynamics/b2_wheel_joint.cpp
+
+b2_world.o: Box2D/src/dynamics/b2_world.cpp Box2D/src/dynamics/b2_contact_solver.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/src/dynamics/b2_island.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_time_of_impact.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_world.o Box2D/src/dynamics/b2_world.cpp
+
+b2_world_callbacks.o: Box2D/src/dynamics/b2_world_callbacks.cpp Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_world_callbacks.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_world_callbacks.o Box2D/src/dynamics/b2_world_callbacks.cpp
+
+b2_broad_phase.o: Box2D/src/collision/b2_broad_phase.cpp Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_broad_phase.o Box2D/src/collision/b2_broad_phase.cpp
+
+b2_chain_shape.o: Box2D/src/collision/b2_chain_shape.cpp Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_chain_shape.o Box2D/src/collision/b2_chain_shape.cpp
+
+b2_circle_shape.o: Box2D/src/collision/b2_circle_shape.cpp Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_circle_shape.o Box2D/src/collision/b2_circle_shape.cpp
+
+b2_collide_circle.o: Box2D/src/collision/b2_collide_circle.cpp Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_collide_circle.o Box2D/src/collision/b2_collide_circle.cpp
+
+b2_collide_edge.o: Box2D/src/collision/b2_collide_edge.cpp Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_collide_edge.o Box2D/src/collision/b2_collide_edge.cpp
+
+b2_collide_polygon.o: Box2D/src/collision/b2_collide_polygon.cpp Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_collide_polygon.o Box2D/src/collision/b2_collide_polygon.cpp
+
+b2_collision.o: Box2D/src/collision/b2_collision.cpp Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_distance.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_collision.o Box2D/src/collision/b2_collision.cpp
+
+b2_distance.o: Box2D/src/collision/b2_distance.cpp Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_distance.o Box2D/src/collision/b2_distance.cpp
+
+b2_dynamic_tree.o: Box2D/src/collision/b2_dynamic_tree.cpp Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_growable_stack.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_dynamic_tree.o Box2D/src/collision/b2_dynamic_tree.cpp
+
+b2_edge_shape.o: Box2D/src/collision/b2_edge_shape.cpp Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_edge_shape.o Box2D/src/collision/b2_edge_shape.cpp
+
+b2_polygon_shape.o: Box2D/src/collision/b2_polygon_shape.cpp Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_block_allocator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_polygon_shape.o Box2D/src/collision/b2_polygon_shape.cpp
+
+b2_time_of_impact.o: Box2D/src/collision/b2_time_of_impact.cpp Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_distance.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_time_of_impact.h \
+		Box2D/include/box2d/b2_timer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_time_of_impact.o Box2D/src/collision/b2_time_of_impact.cpp
+
+b2_block_allocator.o: Box2D/src/common/b2_block_allocator.cpp Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_block_allocator.o Box2D/src/common/b2_block_allocator.cpp
+
+b2_draw.o: Box2D/src/common/b2_draw.cpp Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_draw.o Box2D/src/common/b2_draw.cpp
+
+b2_math.o: Box2D/src/common/b2_math.cpp Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_math.o Box2D/src/common/b2_math.cpp
+
+b2_settings.o: Box2D/src/common/b2_settings.cpp Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_settings.o Box2D/src/common/b2_settings.cpp
+
+b2_stack_allocator.o: Box2D/src/common/b2_stack_allocator.cpp Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_math.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_stack_allocator.o Box2D/src/common/b2_stack_allocator.cpp
+
+b2_timer.o: Box2D/src/common/b2_timer.cpp Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_timer.o Box2D/src/common/b2_timer.cpp
+
+b2_rope.o: Box2D/src/rope/b2_rope.cpp Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_rope.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o b2_rope.o Box2D/src/rope/b2_rope.cpp
+
 main.o: main.cpp MainWindow.h \
 		MenuScreen.h \
 		GameScreen.h
@@ -452,8 +1353,182 @@ MainWindow.o: MainWindow.cpp MainWindow.h \
 MenuScreen.o: MenuScreen.cpp MenuScreen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MenuScreen.o MenuScreen.cpp
 
-GameScreen.o: GameScreen.cpp GameScreen.h
+GameScreen.o: GameScreen.cpp GameScreen.h \
+		GameController.h \
+		PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h \
+		GameView.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameScreen.o GameScreen.cpp
+
+IMU.o: IMU.cpp IMU.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o IMU.o IMU.cpp
+
+GameView.o: GameView.cpp GameView.h \
+		GameController.h \
+		PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameView.o GameView.cpp
+
+GameController.o: GameController.cpp GameController.h \
+		PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameController.o GameController.cpp
+
+PhysicsEngine.o: PhysicsEngine.cpp PhysicsEngine.h \
+		Box2D/include/box2d/box2d.h \
+		Box2D/include/box2d/b2_settings.h \
+		Box2D/include/box2d/b2_types.h \
+		Box2D/include/box2d/b2_api.h \
+		Box2D/include/box2d/b2_common.h \
+		Box2D/include/box2d/b2_draw.h \
+		Box2D/include/box2d/b2_math.h \
+		Box2D/include/box2d/b2_timer.h \
+		Box2D/include/box2d/b2_chain_shape.h \
+		Box2D/include/box2d/b2_shape.h \
+		Box2D/include/box2d/b2_collision.h \
+		Box2D/include/box2d/b2_circle_shape.h \
+		Box2D/include/box2d/b2_edge_shape.h \
+		Box2D/include/box2d/b2_polygon_shape.h \
+		Box2D/include/box2d/b2_broad_phase.h \
+		Box2D/include/box2d/b2_dynamic_tree.h \
+		Box2D/include/box2d/b2_growable_stack.h \
+		Box2D/include/box2d/b2_body.h \
+		Box2D/include/box2d/b2_contact.h \
+		Box2D/include/box2d/b2_fixture.h \
+		Box2D/include/box2d/b2_time_step.h \
+		Box2D/include/box2d/b2_world.h \
+		Box2D/include/box2d/b2_block_allocator.h \
+		Box2D/include/box2d/b2_contact_manager.h \
+		Box2D/include/box2d/b2_stack_allocator.h \
+		Box2D/include/box2d/b2_world_callbacks.h \
+		Box2D/include/box2d/b2_distance_joint.h \
+		Box2D/include/box2d/b2_joint.h \
+		Box2D/include/box2d/b2_friction_joint.h \
+		Box2D/include/box2d/b2_gear_joint.h \
+		Box2D/include/box2d/b2_motor_joint.h \
+		Box2D/include/box2d/b2_mouse_joint.h \
+		Box2D/include/box2d/b2_prismatic_joint.h \
+		Box2D/include/box2d/b2_pulley_joint.h \
+		Box2D/include/box2d/b2_revolute_joint.h \
+		Box2D/include/box2d/b2_weld_joint.h \
+		Box2D/include/box2d/b2_wheel_joint.h \
+		IMU.h \
+		LevelData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PhysicsEngine.o PhysicsEngine.cpp
 
 moc_MainWindow.o: moc_MainWindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainWindow.o moc_MainWindow.cpp
@@ -464,6 +1539,15 @@ moc_MenuScreen.o: moc_MenuScreen.cpp
 moc_GameScreen.o: moc_GameScreen.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GameScreen.o moc_GameScreen.cpp
 
+moc_GameView.o: moc_GameView.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GameView.o moc_GameView.cpp
+
+moc_GameController.o: moc_GameController.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GameController.o moc_GameController.cpp
+
+moc_CalibrationDialog.o: moc_CalibrationDialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CalibrationDialog.o moc_CalibrationDialog.cpp
+
 ####### Install
 
 install:  FORCE
@@ -471,4 +1555,3 @@ install:  FORCE
 uninstall:  FORCE
 
 FORCE:
-

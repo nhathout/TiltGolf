@@ -1,1 +1,18 @@
+# Build folders
+build-*/
+*.o
+*.exe
+*.obj
+
+# Qt moc files
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+
+# Qt temporary files
+*.pro.user
+*.qmake.stash
+*.qmlc
+*.rcc
 .vscode
