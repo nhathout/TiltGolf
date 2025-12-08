@@ -270,6 +270,8 @@ public:
 
             float topBandBottom = wallY - wallHalfH - gap;
             float bottomBandTop = wallY + wallHalfH + gap;
+            float upperConnectorBottom = topBandBottom - lane; // raise the lower edge of upper connector by one ball
+            float lowerConnectorTop = bottomBandTop + lane;    // drop the upper edge of lower connector by one ball
 
             float leftStop = stubX - stubHalfW - gap;
             float rightStart = stubX + stubHalfW + gap;
@@ -278,9 +280,9 @@ public:
             // Left column
             addWaterRect(innerLeft, leftStop, innerTop, innerBottom);
             // Upper connector into the top pool 
-            addWaterRect(leftStop, rightStart, innerTop, topBandBottom);
+            addWaterRect(leftStop, rightStart, innerTop, upperConnectorBottom);
             // Lower connector into the bottom pool 
-            addWaterRect(leftStop, rightStart, bottomBandTop, innerBottom);
+            addWaterRect(leftStop, rightStart, lowerConnectorTop, innerBottom);
             // Top main pool 
             addWaterRect(rightStart, rightLaneLeft, innerTop, topBandBottom);
             // Bottom main pool
