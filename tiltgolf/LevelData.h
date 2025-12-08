@@ -236,7 +236,7 @@ public:
 
         if (id == 6)
         {
-            // Level 6: five water rectangles and a single U-turn path around the left side of the horizontal wall.
+            // Level 6: dense water bands with ball-width corridors hugging the walls and a U-turn around the shifted vertical post.
             float margin = 1.3f;
             level.ballStartPos.Set(level.width - wallThick - margin, level.height - wallThick - margin); // bottom-right
             level.holePos.Set(level.width - wallThick - margin, 2.2f); // top-right lane, right of the top pool
@@ -249,39 +249,51 @@ public:
                 level.water.push_back({b2Vec2(cx, cy), b2Vec2(hx, hy)});
             };
 
-            // Shared edges for the sketch
-            float rightLaneWidth = 2.6f;                       // consistent lane width around the walls
-            float water3Left = wallThick + rightLaneWidth;     // corridor left of the vertical column
-            float water3Right = 5.0f;                          // moves vertical wall/stub right
-            float columnLeft = 6.8f;                           // aligns bridges to the right-shifted column
-            float waterRight = level.width - wallThick - rightLaneWidth; // double-width lane on the right for both bands
+            // Lay water so it hugs the walls with a ball-sized path and pushes farther toward the right wall.
+            const float ballDiameter = 1.0f; // ball radius is 0.5m
+            float wallGap = ballDiameter;     // ball-sized lane between walls/obstacles and water
+            float rightPocket = 1.6f;         // keeps start/hole dry while letting water reach farther right
 
-            float topBandTop = wallThick + 0.3f;
-            float topBandBottom = 6.7f;
-            float lowerBridgeTop = 9.2f;
-            float bottomBandTop = 11.2f;
-            float bottomBandBottom = level.height - wallThick - 0.3f;
+            // Inside faces of the outer walls
+            float innerLeft = wallThick * 2.0f;               // x = 1.0
+            float innerRight = level.width - wallThick * 2.0f; // x = 30.0
+            float innerTop = wallThick * 2.0f;                // y = 1.0
+            float innerBottom = level.height - wallThick * 2.0f; // y = 14.0
 
-            // Water blocks
-            addWaterRect(water3Left, water3Right, topBandTop, bottomBandBottom);
-            addWaterRect(water3Right, columnLeft, topBandTop, topBandBottom);
-            addWaterRect(columnLeft, waterRight, topBandTop, topBandBottom);
-            addWaterRect(water3Right, columnLeft, lowerBridgeTop, bottomBandTop);
-            addWaterRect(columnLeft, waterRight, bottomBandTop, bottomBandBottom);
+            float waterLeft = innerLeft + wallGap;
+            float waterRight = innerRight - rightPocket;
+            float waterTop = innerTop + wallGap;
+            float waterBottom = innerBottom - wallGap;
 
-            // Horizontal wall anchored on the right, forcing the U-turn on the far left
+            // Wall placement: move the junction ~60% across from the right side
             float wallY = 7.5f;
             float wallHalfH = 0.15f;
-            float wallLeft = water3Right;
+            float stubHalfW = 0.15f;
+            float stubHalfH = 1.0f;
+            float stubX = level.width * 0.40f; // ~40% from the left (~60% from the right)
+            float gap = wallGap;               // keep ball-width clearance around the walls
+
+            float topBandBottom = wallY - wallHalfH - gap;
+            float bottomBandTop = wallY + wallHalfH + gap;
+
+            float leftStop = stubX - stubHalfW - gap;
+            float rightStart = stubX + stubHalfW + gap;
+
+            // Water blocks: top/bottom bands split by the vertical lane around the stub
+            addWaterRect(waterLeft, leftStop, waterTop, topBandBottom);
+            addWaterRect(rightStart, waterRight, waterTop, topBandBottom);
+            addWaterRect(waterLeft, leftStop, bottomBandTop, waterBottom);
+            addWaterRect(rightStart, waterRight, bottomBandTop, waterBottom);
+
+            // Horizontal wall anchored on the right, forcing the U-turn on the far left
+            float wallLeft = stubX;
             float wallRight = level.width - wallThick;
             float wallHalfW = (wallRight - wallLeft) * 0.5f;
             float wallCenterX = wallLeft + wallHalfW;
             level.walls.push_back({b2Vec2(wallCenterX, wallY), b2Vec2(wallHalfW, wallHalfH)});
 
             // Small vertical stub at the wall's left end; centered so the horizontal meets its midpoint
-            float stubHalfW = 0.15f;
-            float stubHalfH = 1.0f;
-            float stubCenterX = wallLeft;
+            float stubCenterX = stubX;
             float stubCenterY = wallY; // centered on the horizontal wall
             level.walls.push_back({b2Vec2(stubCenterX, stubCenterY), b2Vec2(stubHalfW, stubHalfH)});
 
