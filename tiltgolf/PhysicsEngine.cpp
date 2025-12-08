@@ -48,7 +48,7 @@ void PhysicsEngine::loadLevel(const LevelConfig& level) {
     b2BodyDef ballDef;
     ballDef.type = b2_dynamicBody;
     ballDef.position = level.ballStartPos;
-    ballDef.linearDamping = 1.0f; // Friction/Air resistance
+    ballDef.linearDamping = 0.8f; // Friction/Air resistance
     ballDef.angularDamping = 0.8f;
     
     ballBody = world->CreateBody(&ballDef);
