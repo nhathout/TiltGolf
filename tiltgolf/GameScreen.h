@@ -22,6 +22,9 @@ public:
     ~GameScreen() = default;
 
     void setLevel(int newLevelId);
+    void setFreePlayMode(bool enabled);
+    void resetAttemptCounter();
+    void setTotalLevels(int total);
 
 signals:
     void exitToMenu();
@@ -52,6 +55,9 @@ private:
     QTimer *timer;
     int timeElapsed;
     int levelId;
+    int attemptCount = 1;
+    bool freePlayActive = false;
+    int totalLevels = 6;
 };
 
 #endif

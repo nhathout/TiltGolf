@@ -15,6 +15,8 @@ class MenuScreen: public QWidget {
 public:
 	MenuScreen(QWidget *parent = nullptr);
 	void setUnlockStates(const std::vector<bool>& states);
+	bool isFreePlayMode() const { return freePlayMode; }
+	int levelCount() const { return levelButtons.size(); }
 
 signals:
 	void levelSelected(int levelId);
