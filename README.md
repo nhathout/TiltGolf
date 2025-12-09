@@ -1,8 +1,6 @@
-<p align="center">
+<p align="left">
   <img src="assets/images/tiltgolf-logo.png" alt="TiltGolf logo" width="200">
 </p>
-
-# TiltGolf
 
 TiltGolf is a tilt-controlled golf game that runs on a BeagleBone with an attached LCD. An IMU senses tilt and a kernel-space driver streams those readings to the Qt game. The UI presents arcade-style menus and levels, while the physics layer keeps the golf ball rolling realistically around the different levels.
 
