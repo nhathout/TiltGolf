@@ -1,4 +1,4 @@
-<p align="left">
+<p align="center">
   <img src="assets/images/tiltgolf-logo.png" alt="TiltGolf logo" width="200">
 </p>
 
