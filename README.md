@@ -29,6 +29,10 @@ make
 
 > ℹ️  Ensure Qt 5.15 (or later) development packages and a C++17-capable compiler are installed.
 
+## Prebuilt BeagleBone Binary
+- `tiltgolf/tiltgolf_final` is the ready-to-run executable for the BeagleBone + IMU + LCD setup if you prefer not to run `make`.
+- Copy to the board and run it.
+
 ## Box2D Test (runs on Mac)
 The `Box2DTest.cpp` file is a lightweight SFML window that drives a Box2D world for tuning forces, damping, and collisions before pushing to hardware.
 
