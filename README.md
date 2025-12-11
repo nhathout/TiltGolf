@@ -4,6 +4,11 @@
 
 TiltGolf is a tilt-controlled golf game that runs on a BeagleBone with an attached LCD. An IMU senses tilt and a kernel-space driver streams those readings to the Qt game. The UI presents arcade-style menus and levels, while the physics layer keeps the golf ball rolling realistically around the different levels.
 
+## Project Links
+- YouTube demo: https://www.youtube.com/watch?v=vEOcKTJfxNo
+- Final report (PDF): https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf
+- Progress presentation (PDF): https://github.com/nhathout/TiltGolf/blob/main/assets/progress-presentation/TiltGolf_%20Project%20Progress.pdf
+
 ## Hardware & Software Stack
 - **BeagleBone Black + LCD cape** – what the game renders on.
 - **Custom IMU module** – `IMU.*` and the kernel driver provide filtered tilt angles.
@@ -80,8 +85,3 @@ g++ -std=c++17 tiltgolf/Box2DTest.cpp -I/usr/include -o build/Box2DTest \
 <p>
   <img src="assets/clips/box2D_testclip.gif" alt="Box2D physics engine test" width="420">
 </p>
-
-## Project Links
-- YouTube demo: https://www.youtube.com/watch?v=vEOcKTJfxNo
-- Final report (PDF): https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf
-- Progress presentation (PDF): https://github.com/nhathout/TiltGolf/blob/main/assets/progress-presentation/TiltGolf_%20Project%20Progress.pdf
