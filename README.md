@@ -79,5 +79,5 @@ g++ -std=c++17 tiltgolf/Box2DTest.cpp -I/usr/include -o build/Box2DTest \
 
 ## Project Links
 - YouTube demo: https://www.youtube.com/watch?v=vEOcKTJfxNo
-- Final report (PDF): 
+- Final report (PDF): https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf
 - Progress presentation (PDF): https://github.com/nhathout/TiltGolf/blob/main/assets/progress-presentation/TiltGolf_%20Project%20Progress.pdf
