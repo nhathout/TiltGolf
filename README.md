@@ -44,3 +44,42 @@ g++ -std=c++17 tiltgolf/Box2DTest.cpp -I/usr/include -o build/Box2DTest \
 
 ./build/Box2DTest
 ```
+
+## Screens & Levels
+<table>
+  <tr>
+    <td><img src="assets/images/tiltgolf-new2.png" alt="Main menu" width="200"></td>
+    <td><img src="assets/images/tiltgolf-new1.png" alt="TiltGolf menu mock" width="200"></td>
+    <td><img src="assets/images/free-play-menu-demo.JPG" alt="Free play menu" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/images/level2-demo.JPG" alt="Level 2" width="200"></td>
+    <td><img src="assets/images/level3-demo.JPG" alt="Level 3" width="200"></td>
+    <td><img src="assets/images/level4-demo.JPG" alt="Level 4" width="200"></td>
+    <td><img src="assets/images/level5-demo.JPG" alt="Level 5" width="200"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/images/level6-demo.JPG" alt="Level 6" width="200"></td>
+    <td><img src="assets/images/tiltgolf-new.png" alt="TiltGolf render" width="200"></td>
+    <td><img src="assets/images/tiltgolf-new2.png" alt="TiltGolf render alt" width="200"></td>
+    <td><img src="assets/images/tiltgolf-logo.png" alt="TiltGolf logo" width="200"></td>
+  </tr>
+</table>
+
+## Hardware & Branding
+<table>
+  <tr>
+    <td><img src="assets/images/tiltgolf-CAD-v1.png" alt="TiltGolf CAD v1" width="200"></td>
+    <td><img src="assets/images/tiltgolf-CAD-v2.png" alt="TiltGolf CAD v2" width="200"></td>
+  </tr>
+</table>
+
+## Physics Engine Test
+<p>
+  <img src="assets/clips/box2D_testclip.gif" alt="Box2D physics engine test" width="420">
+</p>
+
+## Project Links
+- YouTube demo: [paste link]
+- Final report (PDF): [paste link]
+- Progress presentation (PDF): [paste link]
