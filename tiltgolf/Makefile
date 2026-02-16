@@ -1545,6 +1545,9 @@ moc_GameView.o: moc_GameView.cpp
 moc_GameController.o: moc_GameController.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GameController.o moc_GameController.cpp
 
+moc_CalibrationDialog.o: moc_CalibrationDialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CalibrationDialog.o moc_CalibrationDialog.cpp
+
 ####### Install
 
 install:  FORCE
@@ -1552,4 +1555,3 @@ install:  FORCE
 uninstall:  FORCE
 
 FORCE:
-

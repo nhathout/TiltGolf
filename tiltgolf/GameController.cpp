@@ -41,6 +41,8 @@ void GameController::gameLoop() {
 
     // 1. Step Physics
     physics->step();
+    // Pull latest level state (for moving water)
+    currentLevel = physics->getLevelConfig();
 
     // 2. Check Win Condition
     // Calculate distance between ball center and hole center
@@ -66,4 +68,39 @@ b2Vec2 GameController::getBallPos() const {
 
 LevelConfig GameController::getCurrentLevel() const {
     return currentLevel;
+}
+
+void GameController::calibrateIMU()
+{
+    if (physics->calibrateIMU())
+    {
+        std::cout << "GameController: IMU calibrated via PhysicsEngine." << std::endl;
+    }
+    else
+    {
+        std::cerr << "GameController: IMU calibration failed." << std::endl;
+    }
+}
+
+void GameController::startCalibrationPreview(bool resetBallToStart)
+{
+    physics->startCalibrationPreview(resetBallToStart);
+}
+
+void GameController::acceptCalibrationPreview()
+{
+    if (physics->commitCalibrationPreview())
+    {
+        std::cout << "GameController: Calibration preview accepted and saved." << std::endl;
+    }
+    else
+    {
+        std::cerr << "GameController: Failed to save calibration preview." << std::endl;
+    }
+}
+
+void GameController::cancelCalibrationPreview()
+{
+    physics->cancelCalibrationPreview();
+    std::cout << "GameController: Calibration preview canceled." << std::endl;
 }

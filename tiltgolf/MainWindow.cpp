@@ -1,8 +1,12 @@
 #include "MainWindow.h"
 #include "MenuScreen.h"
 #include "GameScreen.h"
+#include "LevelData.h"
 
-// Main window constructor implementation
+// Note: LevelData.h in your current repo is the simple version where PPM is
+// a compile-time constant. If you want to change pixels-per-meter, edit
+// the PPM value in LevelData.h directly.
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	// Set up stack widget
 	stack = new QStackedWidget(this);
@@ -23,13 +27,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	stack->setCurrentWidget(menu);
 }
 
-// Start level slot implementation
+// Slot implementation: start a level (called from menu)
 void MainWindow::startLevel(int levelId) {
 	game->setLevel(levelId);
 	stack->setCurrentWidget(game);
 }
 
-// Return to menu slot implmentation
+// Slot implementation: return to main menu
 void MainWindow::returnToMenu() {
 	stack->setCurrentWidget(menu);
 }

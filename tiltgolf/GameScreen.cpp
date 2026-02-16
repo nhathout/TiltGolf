@@ -1,8 +1,10 @@
 #include "GameScreen.h"
 #include "GameController.h"
 #include "GameView.h"
+#include "CalibrationDialog.h"
 #include <QString>
 #include <QMessageBox>
+#include <memory>
 
 GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     // 1. Create Controller
@@ -21,12 +23,14 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     
     restartButton = new QPushButton("Restart");
     exitButton = new QPushButton("Exit");
+    calibrateButton = new QPushButton("Calibrate"); // new
 
     // Top Bar Widgets
     topBar->addWidget(levelLabel);
     topBar->addStretch();
     topBar->addWidget(timerLabel);
     topBar->addStretch();
+    topBar->addWidget(calibrateButton); // add calibrate button to top bar
     topBar->addWidget(restartButton);
     topBar->addWidget(exitButton);
 
@@ -39,10 +43,55 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
     // 4. Connect Signals
     connect(restartButton, &QPushButton::clicked, this, &GameScreen::restartLevel);
-    connect(exitButton, &QPushButton::clicked, this, &GameScreen::exitToMenu);
-    
+
+    // Exit: pause the running controller before switching screens so the game loop stops
+    connect(exitButton, &QPushButton::clicked, [this]()
+            {
+        // Pause game loop so physics stops running in the background
+        if (controller) controller->pauseGame();
+        emit exitToMenu(); });
+
     // Connect Controller Win Signal
     connect(controller, &GameController::gameWon, this, &GameScreen::handleLevelComplete);
+
+    // Calibrate button: start preview, show compact non-modal dialog with Save/Cancel
+    connect(calibrateButton, &QPushButton::clicked, [this]()
+            {
+        // Start a live preview (temp bias applied immediately)
+        // IMPORTANT: pass false so the ball is NOT forcibly reset/spawned when starting preview
+        controller->startCalibrationPreview(false);
+
+        // Create compact non-modal dialog that lets user save or cancel
+        CalibrationDialog *dlg = new CalibrationDialog(this);
+
+        // Use shared flag so we can detect if Save was clicked
+        auto saved = std::make_shared<bool>(false);
+
+        // When Save is tapped, commit preview and mark saved=true
+        connect(dlg, &CalibrationDialog::saveClicked, [this, saved, dlg]() {
+            controller->acceptCalibrationPreview();
+            *saved = true;
+            // Close the dialog (will trigger destroyed/finished signals)
+            dlg->close();
+        });
+
+        // When Cancel is tapped, cancel preview immediately
+        connect(dlg, &CalibrationDialog::cancelClicked, [this, saved, dlg]() {
+            controller->cancelCalibrationPreview();
+            *saved = false;
+            dlg->close();
+        });
+
+        // If the dialog is destroyed/closed by other means and Save wasn't clicked,
+        // cancel the preview. If it was saved, we've already committed.
+        connect(dlg, &CalibrationDialog::destroyed, [this, saved]() {
+            if (!(*saved)) {
+                controller->cancelCalibrationPreview();
+            }
+        });
+
+        // Show the compact dialog non-modally
+        dlg->show(); });
 
     // Game Timer (for UI clock, not physics)
     timer = new QTimer(this);
