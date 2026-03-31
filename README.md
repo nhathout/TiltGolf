@@ -4,6 +4,15 @@
 
 TiltGolf is a tilt-controlled golf game that runs on a BeagleBone with an attached LCD. An IMU senses tilt and a kernel-space driver streams those readings to the Qt game. The UI presents arcade-style menus and levels, while the physics layer keeps the golf ball rolling realistically around the different levels.
 
+## Demo
+<p align="center">
+  <img src="assets/clips/TiltGolf_Final_Project_of_EC535_Boston_University_Open_Source_IMU_Mini_Golf_on_BeagleBone.gif" alt="TiltGolf gameplay demo" width="720">
+</p>
+
+<p align="center">
+  <a href="assets/clips/TiltGolf%20%E2%80%94%20Final%20Project%20of%20EC535%20%40%20Boston%20University%20_%20Open-Source%20IMU%20Mini%20Golf%20on%20BeagleBone.mp4">View the full MP4 demo</a>
+</p>
+
 ## Project Links
 - YouTube demo: https://www.youtube.com/watch?v=vEOcKTJfxNo
 - Final report (PDF): https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf
